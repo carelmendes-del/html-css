@@ -31,11 +31,11 @@ jobs:
           node-version: 20
 
       - name: Instalar Dependências (Frontend)
-        working-directory: ./frontend
+        working-directory: ./cv-builder-app/frontend
         run: npm install
 
       - name: Build do Projeto React (Vite)
-        working-directory: ./frontend
+        working-directory: ./cv-builder-app/frontend
         run: npm run build
 
       - name: Configurar GitHub Pages
@@ -44,7 +44,7 @@ jobs:
       - name: Upload Artifact do Frontend Built
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './frontend/dist'
+          path: './cv-builder-app/frontend/dist'
 
       - name: Deploy Final para o GitHub Pages
         id: deployment
