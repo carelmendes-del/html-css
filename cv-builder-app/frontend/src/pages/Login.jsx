@@ -38,8 +38,8 @@ const Login = () => {
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#09090b', color: '#fafafa', fontFamily: 'sans-serif' }}>
-      <div style={{ background: '#18181b', padding: '40px', borderRadius: '12px', width: '100%', maxWidth: '400px', border: '1px solid #3f3f46' }}>
+    <div className="mobile-p-10" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#09090b', color: '#fafafa', fontFamily: 'sans-serif' }}>
+      <div className="mobile-p-20" style={{ background: '#18181b', padding: '40px', borderRadius: '12px', width: '100%', maxWidth: '400px', border: '1px solid #3f3f46' }}>
         <h1 style={{ fontSize: '28px', marginBottom: '8px', textAlign: 'center' }}>CurrículoStudio</h1>
         <p style={{ fontSize: '14px', color: '#a1a1aa', textAlign: 'center', marginBottom: '24px' }}>
           {isRegister ? 'Crie a sua conta na plataforma' : 'Faça login para gerir os seus CVs'}

@@ -190,14 +190,14 @@ const CVBuilder = () => {
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         
         {/* TOP HEADER */}
-        <div style={{ padding: '16px 32px', background: colors.bg2, borderBottom: `1px solid ${colors.border}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center', zIndex: 10, boxShadow: '0 2px 10px rgba(0,0,0,0.02)' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+        <div className="mobile-header-toolbar mobile-p-10" style={{ padding: '16px 32px', background: colors.bg2, borderBottom: `1px solid ${colors.border}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center', zIndex: 10, boxShadow: '0 2px 10px rgba(0,0,0,0.02)' }}>
+          <div className="mobile-full-width mobile-gap-10" style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
              <h2 style={{ margin: 0, color: colors.text1, fontSize: '20px', fontWeight: '900', letterSpacing: '-0.5px' }}>CurrículoStudio</h2>
              <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} style={{ background: 'transparent', border: `1px solid ${colors.border}`, color: colors.text1, padding: '8px 14px', borderRadius: '8px', cursor: 'pointer', fontSize: '13px', fontWeight: '600' }}>
                 {theme === 'dark' ? '☀️ Modo Claro' : '🌙 Modo Escuro'}
              </button>
           </div>
-          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+          <div className="mobile-wrap" style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
             <select value={template} onChange={e => setTemplate(Number(e.target.value))} style={{...inputStyle, width: 'auto', margin: 0}}>
               <option value={1}>1. Clássico Azul</option>
               <option value={2}>2. Moderno Verde</option>
@@ -217,7 +217,7 @@ const CVBuilder = () => {
         </div>
 
         {/* TABS MENU */}
-        <div style={{ display: 'flex', background: colors.bg2, borderBottom: `1px solid ${colors.border}`, padding: '0 24px', overflowX: 'auto' }}>
+        <div className="mobile-tabs" style={{ display: 'flex', background: colors.bg2, borderBottom: `1px solid ${colors.border}`, padding: '0 24px', overflowX: 'auto' }}>
           {['pessoais', 'perfil', 'experiencia', 'formacao', 'cursos', 'competencias', 'idiomas'].map(tab => (
             <button key={tab} onClick={() => setActiveTab(tab)} style={{ padding: '14px 20px', background: 'none', border: 'none', color: activeTab === tab ? colors.text1 : colors.text2, fontSize: '13px', fontWeight: activeTab === tab ? 600 : 400, cursor: 'pointer', borderBottom: activeTab === tab ? `2px solid ${colors.text1}` : '2px solid transparent', textTransform: 'capitalize', whiteSpace: 'nowrap' }}>
               {tab === 'perfil' ? 'Perfil Pessoal' : tab}
@@ -226,8 +226,8 @@ const CVBuilder = () => {
         </div>
 
         {/* EDITOR AREA CENTRADO */}
-        <div style={{ flex: 1, overflowY: 'auto', padding: '40px 24px', display: 'flex', justifyContent: 'center' }}>
-          <div style={{ width: '100%', maxWidth: '820px', background: colors.bg2, border: `1px solid ${colors.border}`, borderRadius: '20px', padding: '36px', boxShadow: theme === 'light' ? '0 20px 40px -10px rgba(0,0,0,0.06)' : '0 20px 40px -10px rgba(0,0,0,0.4)' }}>
+        <div className="mobile-editor-container" style={{ flex: 1, overflowY: 'auto', padding: '40px 24px', display: 'flex', justifyContent: 'center' }}>
+          <div className="mobile-editor-card" style={{ width: '100%', maxWidth: '820px', background: colors.bg2, border: `1px solid ${colors.border}`, borderRadius: '20px', padding: '36px', boxShadow: theme === 'light' ? '0 20px 40px -10px rgba(0,0,0,0.06)' : '0 20px 40px -10px rgba(0,0,0,0.4)' }}>
             
             {activeTab === 'pessoais' && (
               <div>
@@ -240,20 +240,20 @@ const CVBuilder = () => {
                 <label style={labelStyle}>Cargo / Título</label>
                 <input type="text" value={data.title} onChange={e => setData({...data, title: e.target.value})} style={inputStyle} />
                 
-                <div style={{ display: 'flex', gap: '8px' }}>
+                <div className="mobile-flex-col" style={{ display: 'flex', gap: '8px' }}>
                   <div style={{ flex: 1 }}><label style={labelStyle}>E-mail</label><input type="email" value={data.email} onChange={e => setData({...data, email: e.target.value})} style={inputStyle} /></div>
                   <div style={{ flex: 1 }}><label style={labelStyle}>Telefone</label><input type="text" value={data.phone} onChange={e => setData({...data, phone: e.target.value})} style={inputStyle} /></div>
                 </div>
 
-                <div style={{ display: 'flex', gap: '8px' }}>
+                <div className="mobile-flex-col" style={{ display: 'flex', gap: '8px' }}>
                   <div style={{ flex: 1 }}><label style={labelStyle}>Morada / Cidade</label><input type="text" value={data.location} onChange={e => setData({...data, location: e.target.value})} style={inputStyle} /></div>
                   <div style={{ flex: 1 }}><label style={labelStyle}>LinkedIn</label><input type="text" value={data.linkedin} onChange={e => setData({...data, linkedin: e.target.value})} style={inputStyle} /></div>
                 </div>
 
                 {template === 8 && (
-                  <div style={{ border: `2px dashed ${colors.border}`, padding: '20px', borderRadius: '12px', marginTop: '16px', background: theme === 'light' ? '#f8fafc' : '#1e293b' }}>
+                  <div className="mobile-p-20" style={{ border: `2px dashed ${colors.border}`, padding: '20px', borderRadius: '12px', marginTop: '16px', background: theme === 'light' ? '#f8fafc' : '#1e293b' }}>
                     <h4 style={{ fontSize: '13px', color: colors.text2, marginBottom: '12px', fontWeight: '800' }}>Campos Exclusivos (Moçambique)</h4>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                    <div className="mobile-grid-1" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                       <div><label style={labelStyle}>Nacionalidade</label><input type="text" value={data.nacionalidade} onChange={e => setData({...data, nacionalidade: e.target.value})} style={inputStyle} /></div>
                       <div><label style={labelStyle}>Data Nascimento</label><input type="text" value={data.dataNascimento} onChange={e => setData({...data, dataNascimento: e.target.value})} style={inputStyle} /></div>
                       <div><label style={labelStyle}>Estado Civil</label><input type="text" value={data.estadoCivil} onChange={e => setData({...data, estadoCivil: e.target.value})} style={inputStyle} /></div>
@@ -335,9 +335,9 @@ const CVBuilder = () => {
             {activeTab === 'idiomas' && (
               <div>
                 {data.languages.map(l => (
-                  <div key={l.id} style={{ display: 'flex', gap: '8px', marginBottom: '12px', alignItems: 'flex-start' }}>
-                    <div style={{ flex: 1 }}><label style={labelStyle}>Idioma</label><input type="text" value={l.name} onChange={ev => updateLang(l.id, 'name', ev.target.value)} style={inputStyle} /></div>
-                    <div style={{ width: '130px' }}><label style={labelStyle}>Nível</label><select value={l.level} onChange={ev => updateLang(l.id, 'level', ev.target.value)} style={inputStyle}>
+                  <div key={l.id} className="mobile-flex-col" style={{ display: 'flex', gap: '8px', marginBottom: '12px', alignItems: 'flex-start' }}>
+                    <div className="mobile-full-width" style={{ flex: 1 }}><label style={labelStyle}>Idioma</label><input type="text" value={l.name} onChange={ev => updateLang(l.id, 'name', ev.target.value)} style={inputStyle} /></div>
+                    <div className="mobile-full-width" style={{ width: '130px' }}><label style={labelStyle}>Nível</label><select value={l.level} onChange={ev => updateLang(l.id, 'level', ev.target.value)} style={inputStyle}>
                       {['Nativo', 'Fluente', 'Avançado', 'Intermediário', 'Básico'].map(lv => <option key={lv}>{lv}</option>)}
                     </select></div>
                     <div style={{ paddingTop: '22px' }}><button onClick={() => removeLang(l.id)} style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', fontSize: '24px' }}>&times;</button></div>
@@ -353,9 +353,9 @@ const CVBuilder = () => {
       {/* FULL SCREEN PREVIEW MODAL */}
       {showPreview && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', display: 'flex', flexDirection: 'column', zIndex: 9999 }}>
-          <div style={{ padding: '16px 24px', background: colors.bg2, borderBottom: `1px solid ${colors.border}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexShrink: 0 }}>
+          <div className="mobile-header-toolbar mobile-p-10" style={{ padding: '16px 24px', background: colors.bg2, borderBottom: `1px solid ${colors.border}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexShrink: 0 }}>
             <h3 style={{ color: colors.text1, margin: 0, fontSize: '16px' }}>👁 Modo de Visualização</h3>
-            <div style={{ display: 'flex', gap: '12px' }}>
+            <div className="mobile-wrap" style={{ display: 'flex', gap: '12px' }}>
               <button onClick={handlePdfDownload} style={{ background: colors.btnBg, color: colors.btnText, border: 'none', padding: '8px 16px', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold', fontSize: '13px' }}>⬇ Baixar PDF</button>
               <button onClick={() => setShowPreview(false)} style={{ background: '#ef4444', color: '#fff', border: 'none', padding: '8px 16px', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold', fontSize: '13px' }}>✕ Fechar</button>
             </div>
@@ -378,11 +378,11 @@ const CVBuilder = () => {
       {/* OFFLINE IMPORT MODAL */}
       {showAiModal && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10000 }}>
-          <div style={{ background: colors.bg2, padding: '24px', borderRadius: '12px', width: '90%', maxWidth: '600px', border: `1px solid ${colors.border}` }}>
+          <div className="mobile-p-20" style={{ background: colors.bg2, padding: '24px', borderRadius: '12px', width: '90%', maxWidth: '600px', border: `1px solid ${colors.border}` }}>
             <h3 style={{ color: colors.text1, margin: '0 0 12px 0' }}>Importação Rápida de Ficheiro</h3>
             <p style={{ color: colors.text2, fontSize: '13px', marginBottom: '16px' }}>O sistema procurará Emails, Telefones, e tentará separar as secções automaticamente no seu próprio computador (100% Offline e Sem APIs!).</p>
             
-            <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
+            <div className="mobile-flex-col" style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
               <input type="file" id="cv-file-upload" accept=".pdf,.doc,.docx" style={{ display: 'none' }} onChange={handleFileImport} />
               <button disabled={aiLoading} onClick={() => document.getElementById('cv-file-upload').click()} style={{ background: colors.btnBg, color: colors.btnText, border: 'none', padding: '10px 12px', borderRadius: '6px', cursor: 'pointer', fontSize: '13px', flex: 1, fontWeight: '700' }}>
                 📄 Selecionar Ficheiro (PDF / Word)

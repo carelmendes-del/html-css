@@ -109,3 +109,54 @@ code {
   padding: 4px 8px;
   background: var(--code-bg);
 }
+
+/* === RESPONSIVE UTILITIES === */
+@media (max-width: 768px) {
+  .mobile-flex-col {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+  .mobile-wrap {
+    flex-wrap: wrap !important;
+  }
+  .mobile-p-20 {
+    padding: 20px !important;
+  }
+  .mobile-p-10 {
+    padding: 10px !important;
+  }
+  .mobile-text-center {
+    text-align: center !important;
+  }
+  .mobile-gap-10 {
+    gap: 10px !important;
+  }
+  .mobile-gap-16 {
+    gap: 16px !important;
+  }
+  .mobile-grid-1 {
+    grid-template-columns: 1fr !important;
+  }
+  .mobile-full-width {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  .mobile-header-toolbar {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+  }
+  .mobile-tabs {
+    padding: 0 12px !important;
+    -webkit-overflow-scrolling: touch;
+  }
+  .mobile-editor-container {
+    padding: 24px 16px !important;
+  }
+  .mobile-editor-card {
+    padding: 20px 16px !important;
+  }
+  .mobile-mb-10 {
+    margin-bottom: 10px !important;
+  }
+}

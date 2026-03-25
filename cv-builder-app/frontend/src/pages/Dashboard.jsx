@@ -15,9 +15,9 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <div style={{ minHeight: '100vh', background: '#09090b', color: '#fafafa', fontFamily: 'sans-serif', padding: '40px' }}>
+    <div className="mobile-p-20" style={{ minHeight: '100vh', background: '#09090b', color: '#fafafa', fontFamily: 'sans-serif', padding: '40px' }}>
       <div style={{ maxWidth: '900px', margin: '0 auto' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px' }}>
+        <div className="mobile-flex-col mobile-text-center mobile-gap-16" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px' }}>
           <div>
             <h1 style={{ fontSize: '32px', fontFamily: 'Playfair Display, serif', fontWeight: '900' }}>Olá, {user.name}</h1>
             <p style={{ color: '#a1a1aa' }}>Bem-vindo ao seu painel principal.</p>
@@ -27,7 +27,7 @@ const Dashboard = () => {
           </button>
         </div>
 
-        <div style={{ display: 'flex', gap: '20px', marginBottom: '40px' }}>
+        <div className="mobile-flex-col" style={{ display: 'flex', gap: '20px', marginBottom: '40px' }}>
           <div onClick={() => navigate('/cv/new')} style={{ flex: 1, background: '#18181b', border: '1px dashed #3f3f46', padding: '30px', borderRadius: '12px', textAlign: 'center', cursor: 'pointer', transition: 'border-color 0.2s', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <div style={{ fontSize: '32px', marginBottom: '12px' }}>📄</div>
             <h3 style={{ fontSize: '16px', marginBottom: '4px' }}>Criar Novo Currículo</h3>
@@ -41,7 +41,7 @@ const Dashboard = () => {
         </div>
 
         <h2 style={{ fontSize: '20px', borderBottom: '1px solid #27272a', paddingBottom: '12px', marginBottom: '20px' }}>Os seus Currículos Salvos</h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '20px' }}>
+        <div className="mobile-grid-1" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '20px' }}>
           {cvs.map(cv => (
             <div key={cv.id} onClick={() => navigate(`/cv/${cv.id}`)} style={{ background: '#18181b', border: '1px solid #27272a', padding: '20px', borderRadius: '12px', cursor: 'pointer' }}>
               <h4 style={{ fontSize: '15px', marginBottom: '8px' }}>{cv.title}</h4>
