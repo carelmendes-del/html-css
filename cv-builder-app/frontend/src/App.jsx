@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
@@ -14,7 +14,7 @@ const ProtectedRoute = ({ children }) => {
 function App() {
   return (
     <GoogleOAuthProvider clientId="YOUR_CLIENT_ID_HERE">
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/" element={
@@ -38,7 +38,7 @@ function App() {
             </ProtectedRoute>
           } />
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </GoogleOAuthProvider>
   );
 }
