@@ -26,11 +26,12 @@ const CVBuilder = () => {
     ? { bg1: '#09090b', bg2: '#18181b', border: '#27272a', text1: '#fafafa', text2: '#a1a1aa', btnBg: '#fafafa', btnText: '#09090b' }
     : { bg1: '#f4f4f5', bg2: '#ffffff', border: '#e4e4e7', text1: '#09090b', text2: '#52525b', btnBg: '#09090b', btnText: '#fafafa' };
 
-  const inputStyle = { width: '100%', padding: '10px 12px', marginBottom: '8px', background: colors.bg1, border: `1px solid ${colors.border}`, borderRadius: '6px', color: colors.text1, fontSize: '13px', outline: 'none' };
-  const labelStyle = { display: 'block', fontSize: '11px', color: colors.text2, marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: '600' };
-  const cardStyle = { background: colors.bg2, border: `1px solid ${colors.border}`, padding: '16px', borderRadius: '8px', marginBottom: '12px', position: 'relative' };
-  const removeBtnStyle = { position: 'absolute', top: '8px', right: '8px', background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', fontSize: '18px' };
-  const addBtnStyle = { width: '100%', padding: '12px', border: `1px dashed ${colors.border}`, background: 'none', color: colors.text2, borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' };
+  const shadow = theme === 'light' ? '0 4px 15px rgba(0,0,0,0.03)' : '0 4px 15px rgba(0,0,0,0.4)';
+  const inputStyle = { width: '100%', padding: '12px 16px', marginBottom: '14px', background: colors.bg1, border: `1px solid ${colors.border}`, borderRadius: '10px', color: colors.text1, fontSize: '13px', outline: 'none', transition: 'border 0.2s', boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.02)' };
+  const labelStyle = { display: 'block', fontSize: '11px', color: colors.text2, marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: '700' };
+  const cardStyle = { background: colors.bg2, border: `1px solid ${colors.border}`, padding: '24px', borderRadius: '14px', marginBottom: '16px', position: 'relative', boxShadow: shadow };
+  const removeBtnStyle = { position: 'absolute', top: '12px', right: '12px', background: '#fee2e2', border: 'none', color: '#ef4444', cursor: 'pointer', fontSize: '16px', width: '28px', height: '28px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' };
+  const addBtnStyle = { width: '100%', padding: '14px', border: `2px dashed ${colors.border}`, background: 'none', color: colors.text2, borderRadius: '12px', cursor: 'pointer', fontWeight: 'bold', transition: 'all 0.2s' };
 
   const handlePdfDownload = () => {
     const opt = {
@@ -189,10 +190,10 @@ const CVBuilder = () => {
       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         
         {/* TOP HEADER */}
-        <div style={{ padding: '16px 24px', background: colors.bg2, borderBottom: `1px solid ${colors.border}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-             <h2 style={{ margin: 0, color: colors.text1, fontSize: '18px', fontWeight: '800' }}>CurrículoStudio</h2>
-             <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} style={{ background: 'transparent', border: `1px solid ${colors.border}`, color: colors.text1, padding: '6px 12px', borderRadius: '6px', cursor: 'pointer', fontSize: '13px' }}>
+        <div style={{ padding: '16px 32px', background: colors.bg2, borderBottom: `1px solid ${colors.border}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center', zIndex: 10, boxShadow: '0 2px 10px rgba(0,0,0,0.02)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+             <h2 style={{ margin: 0, color: colors.text1, fontSize: '20px', fontWeight: '900', letterSpacing: '-0.5px' }}>CurrículoStudio</h2>
+             <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} style={{ background: 'transparent', border: `1px solid ${colors.border}`, color: colors.text1, padding: '8px 14px', borderRadius: '8px', cursor: 'pointer', fontSize: '13px', fontWeight: '600' }}>
                 {theme === 'dark' ? '☀️ Modo Claro' : '🌙 Modo Escuro'}
              </button>
           </div>
@@ -209,9 +210,9 @@ const CVBuilder = () => {
               <option value={9}>9. Criativo Vibrante</option>
               <option value={10}>10. Executivo Premium</option>
             </select>
-            <button onClick={() => setShowAiModal(true)} style={{ background: 'transparent', border: `1px solid ${colors.border}`, color: colors.text1, padding: '8px 16px', borderRadius: '6px', cursor: 'pointer', fontWeight: '600', fontSize: '13px' }}>✦ Importar CV</button>
-            <button onClick={() => setShowPreview(true)} style={{ background: '#3b82f6', color: '#fff', border: 'none', padding: '8px 16px', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold', fontSize: '13px' }}>👁 Visualizar CV</button>
-            <button onClick={handlePdfDownload} style={{ background: colors.btnBg, color: colors.btnText, border: 'none', padding: '8px 16px', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold', fontSize: '13px' }}>⬇ Baixar PDF</button>
+            <button onClick={() => setShowAiModal(true)} style={{ background: 'transparent', border: `1px solid ${colors.border}`, color: colors.text1, padding: '10px 18px', borderRadius: '8px', cursor: 'pointer', fontWeight: '700', fontSize: '13px' }}>✦ Importar CV</button>
+            <button onClick={() => setShowPreview(true)} style={{ background: '#3b82f6', color: '#fff', border: 'none', padding: '10px 18px', borderRadius: '8px', cursor: 'pointer', fontWeight: '700', fontSize: '13px', boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)' }}>👁 Visualizar CV</button>
+            <button onClick={handlePdfDownload} style={{ background: colors.btnBg, color: colors.btnText, border: 'none', padding: '10px 18px', borderRadius: '8px', cursor: 'pointer', fontWeight: '700', fontSize: '13px', boxShadow: theme === 'light' ? '0 4px 12px rgba(0,0,0,0.1)' : 'none' }}>⬇ Baixar PDF</button>
           </div>
         </div>
 
@@ -225,8 +226,8 @@ const CVBuilder = () => {
         </div>
 
         {/* EDITOR AREA CENTRADO */}
-        <div style={{ flex: 1, overflowY: 'auto', padding: '32px 24px', display: 'flex', justifyContent: 'center' }}>
-          <div style={{ width: '100%', maxWidth: '800px', background: colors.bg2, border: `1px solid ${colors.border}`, borderRadius: '12px', padding: '24px' }}>
+        <div style={{ flex: 1, overflowY: 'auto', padding: '40px 24px', display: 'flex', justifyContent: 'center' }}>
+          <div style={{ width: '100%', maxWidth: '820px', background: colors.bg2, border: `1px solid ${colors.border}`, borderRadius: '20px', padding: '36px', boxShadow: theme === 'light' ? '0 20px 40px -10px rgba(0,0,0,0.06)' : '0 20px 40px -10px rgba(0,0,0,0.4)' }}>
             
             {activeTab === 'pessoais' && (
               <div>
@@ -250,9 +251,9 @@ const CVBuilder = () => {
                 </div>
 
                 {template === 8 && (
-                  <div style={{ border: `1px dashed ${colors.border}`, padding: '12px', borderRadius: '8px', marginTop: '12px' }}>
-                    <h4 style={{ fontSize: '12px', color: colors.text2, marginBottom: '8px' }}>Campos Exclusivos (Moçambique)</h4>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+                  <div style={{ border: `2px dashed ${colors.border}`, padding: '20px', borderRadius: '12px', marginTop: '16px', background: theme === 'light' ? '#f8fafc' : '#1e293b' }}>
+                    <h4 style={{ fontSize: '13px', color: colors.text2, marginBottom: '12px', fontWeight: '800' }}>Campos Exclusivos (Moçambique)</h4>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                       <div><label style={labelStyle}>Nacionalidade</label><input type="text" value={data.nacionalidade} onChange={e => setData({...data, nacionalidade: e.target.value})} style={inputStyle} /></div>
                       <div><label style={labelStyle}>Data Nascimento</label><input type="text" value={data.dataNascimento} onChange={e => setData({...data, dataNascimento: e.target.value})} style={inputStyle} /></div>
                       <div><label style={labelStyle}>Estado Civil</label><input type="text" value={data.estadoCivil} onChange={e => setData({...data, estadoCivil: e.target.value})} style={inputStyle} /></div>
@@ -317,14 +318,14 @@ const CVBuilder = () => {
             {activeTab === 'competencias' && (
               <div>
                 <label style={labelStyle}>Adicionar Competências (Pressione Enter ou use ,)</label>
-                <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
+                <div style={{ display: 'flex', gap: '8px', marginBottom: '20px' }}>
                   <input type="text" value={skillInput} onChange={e => setSkillInput(e.target.value)} onKeyDown={e => {if(e.key === 'Enter' || e.key === ','){e.preventDefault(); addSkill()}}} style={{...inputStyle, marginBottom: 0}} placeholder="Redes, Gestão..." />
-                  <button onClick={addSkill} style={{ background: colors.border, color: colors.text1, border: 'none', borderRadius: '6px', padding: '0 16px', cursor: 'pointer', fontWeight: 'bold' }}>+</button>
+                  <button onClick={addSkill} style={{ background: colors.border, color: colors.text1, border: 'none', borderRadius: '10px', padding: '0 20px', cursor: 'pointer', fontWeight: 'bold', fontSize: '18px' }}>+</button>
                 </div>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
                   {data.skills.map((s, i) => (
-                    <div key={i} style={{ background: colors.border, color: colors.text1, padding: '6px 12px', borderRadius: '16px', fontSize: '12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      {s} <button onClick={() => removeSkill(i)} style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', fontSize: '16px' }}>&times;</button>
+                    <div key={i} style={{ background: colors.border, color: colors.text1, padding: '8px 16px', borderRadius: '20px', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '10px', fontWeight: '500' }}>
+                      {s} <button onClick={() => removeSkill(i)} style={{ background: '#ef4444', border: 'none', color: '#fff', cursor: 'pointer', fontSize: '14px', width: '20px', height: '20px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>&times;</button>
                     </div>
                   ))}
                 </div>

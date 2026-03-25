@@ -5,7 +5,7 @@ import axios from 'axios';
 const Dashboard = () => {
   const navigate = useNavigate();
   const [cvs, setCvs] = useState([]);
-  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const user = JSON.parse(sessionStorage.getItem('user') || '{}');
 
   useEffect(() => {
     // In actual implementation this fetches from backend
@@ -22,7 +22,7 @@ const Dashboard = () => {
             <h1 style={{ fontSize: '32px', fontFamily: 'Playfair Display, serif', fontWeight: '900' }}>Olá, {user.name}</h1>
             <p style={{ color: '#a1a1aa' }}>Bem-vindo ao seu painel principal.</p>
           </div>
-          <button onClick={() => { localStorage.clear(); navigate('/login'); }} style={{ background: '#27272a', border: '1px solid #3f3f46', color: '#fafafa', padding: '8px 16px', borderRadius: '6px', cursor: 'pointer' }}>
+          <button onClick={() => { sessionStorage.clear(); navigate('/login'); }} style={{ background: '#27272a', border: '1px solid #3f3f46', color: '#fafafa', padding: '8px 16px', borderRadius: '6px', cursor: 'pointer' }}>
             Sair
           </button>
         </div>

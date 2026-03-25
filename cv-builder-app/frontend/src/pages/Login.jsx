@@ -15,8 +15,8 @@ const Login = () => {
     try {
       const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
       const res = await axios.post(`${BASE_URL}/api/auth/google`, { token: credentialResponse.credential });
-      localStorage.setItem('token', res.data.token);
-      localStorage.setItem('user', JSON.stringify(res.data.user));
+      sessionStorage.setItem('token', res.data.token);
+      sessionStorage.setItem('user', JSON.stringify(res.data.user));
       navigate('/');
     } catch (err) {
       setError('Erro ao fazer login com Google.');
@@ -29,8 +29,8 @@ const Login = () => {
       const endpoint = isRegister ? '/api/auth/register' : '/api/auth/login';
       // MOCK: in a full implementation, add register/login local routes
       // Fallback to local storage mock for demonstration if backend fails quickly
-      localStorage.setItem('token', 'local-jwt-token');
-      localStorage.setItem('user', JSON.stringify({ email, name: name || 'Utilizador' }));
+      sessionStorage.setItem('token', 'local-jwt-token');
+      sessionStorage.setItem('user', JSON.stringify({ email, name: name || 'Utilizador' }));
       navigate('/');
     } catch (err) {
       setError('Erro na autenticação local.');
