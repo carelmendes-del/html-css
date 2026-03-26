@@ -16,6 +16,7 @@ const CVBuilder = () => {
 
   const [template, setTemplate] = useState(1);
   const [activeTab, setActiveTab] = useState('pessoais');
+  const [lang, setLang] = useState('pt');
   const [showAiModal, setShowAiModal] = useState(false);
   const [aiText, setAiText] = useState('');
   const [aiLoading, setAiLoading] = useState(false);
@@ -288,6 +289,10 @@ ${aiText}
             </button>
           </div>
           <div className="mobile-wrap" style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+            <select value={lang} onChange={e => setLang(e.target.value)} style={{ ...inputStyle, width: 'auto', margin: 0, fontWeight: 'bold' }}>
+              <option value="pt">🇵🇹 PT</option>
+              <option value="en">🇬🇧 EN</option>
+            </select>
             <select value={template} onChange={e => setTemplate(Number(e.target.value))} style={{ ...inputStyle, width: 'auto', margin: 0 }}>
               <option value={1}>1. Clássico Azul</option>
               <option value={2}>2. Moderno Verde</option>
@@ -299,6 +304,9 @@ ${aiText}
               <option value={8}>8. Modelo Moçambique Oficial</option>
               <option value={9}>9. Criativo Vibrante</option>
               <option value={10}>10. Executivo Premium</option>
+              <option value={11}>11. Moderno Bicolor</option>
+              <option value={12}>12. Minimalista Executivo</option>
+              <option value={13}>13. Profissional Dinâmico</option>
             </select>
             <button onClick={() => setShowAiModal(true)} style={{ background: 'transparent', border: `1px solid ${colors.border}`, color: colors.text1, padding: '10px 18px', borderRadius: '8px', cursor: 'pointer', fontWeight: '700', fontSize: '13px' }}>✦ Importar CV</button>
             <button onClick={() => setShowPreview(true)} style={{ background: '#3b82f6', color: '#fff', border: 'none', padding: '10px 18px', borderRadius: '8px', cursor: 'pointer', fontWeight: '700', fontSize: '13px', boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)' }}>👁 Visualizar CV</button>
@@ -470,7 +478,7 @@ ${aiText}
               <div
                 ref={pdfRef}
                 style={{ width: '794px', minHeight: '1123px', background: '#fff', boxShadow: '0 20px 40px rgba(0,0,0,0.3)' }}
-                dangerouslySetInnerHTML={{ __html: renderCV(template, data) }}
+                dangerouslySetInnerHTML={{ __html: renderCV(template, data, lang) }}
               />
             </div>
           </div>
@@ -545,7 +553,7 @@ ${aiText}
       <div
         id="print-area"
         style={{ display: 'none' }}
-        dangerouslySetInnerHTML={{ __html: renderCV(template, data) }}
+        dangerouslySetInnerHTML={{ __html: renderCV(template, data, lang) }}
       />
     </div>
   );

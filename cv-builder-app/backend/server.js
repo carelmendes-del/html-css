@@ -130,7 +130,6 @@ app.put('/api/cvs/:id', authenticate, (req, res) => {
 });
 
 // Removed AI routes as per user request to be API-free
-
 app.listen(PORT, () => {
   console.log(`Backend server running on http://localhost:${PORT}`);
 });

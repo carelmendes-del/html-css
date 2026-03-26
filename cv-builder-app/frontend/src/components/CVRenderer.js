@@ -1,4 +1,4 @@
-export const renderCV = (templateId, data) => {
+export const renderCV = (templateId, data, lang = 'pt') => {
   const { name, title, email, phone, location, linkedin, summary, photo, nacionalidade, dataNascimento, estadoCivil, bi } = data;
   const experiences = data.experiences || [];
   const educations = data.educations || [];
@@ -11,6 +11,20 @@ export const renderCV = (templateId, data) => {
   const last = np.length > 1 ? np.pop() : '';
   const first = np.join(' ');
   const initials = ((first||'').charAt(0)+(last||'').charAt(0)).toUpperCase() || 'CV';
+
+  const dict = {
+    pt: {
+      profile: "Perfil Profissional", experience: "Experiência Profissional", education: "Formação Académica", 
+      courses: "Certificações", skills: "Competências", languages: "Idiomas", 
+      contact: "Contacto", details: "Dados Pessoais", references: "Referências"
+    },
+    en: {
+      profile: "Professional Profile", experience: "Work Experience", education: "Education", 
+      courses: "Certifications", skills: "Skills", languages: "Languages", 
+      contact: "Contact", details: "Personal Details", references: "References"
+    }
+  };
+  const t = dict[lang] || dict.pt;
 
   // HELPER BLOCKS FOR TEMPLATES 1-5
   const expBlocks = experiences.map(e => `
@@ -50,13 +64,13 @@ export const renderCV = (templateId, data) => {
       </div>
     </div>
     <div class="cv-body"><div class="cv-main">
-      ${summary?`<div class="section-block"><div class="cv-section-title">Perfil</div><div class="summary-text">${esc(summary)}</div></div>`:''}
-      ${experiences.length?`<div class="section-block"><div class="cv-section-title">Experiência</div>${expBlocks}</div>`:''}
-      ${educations.length?`<div class="section-block"><div class="cv-section-title">Formação</div>${eduBlocks}</div>`:''}
-      ${courses.length?`<div class="section-block"><div class="cv-section-title">Cursos</div>${courseBlocks}</div>`:''}
+      ${summary?`<div class="section-block"><div class="cv-section-title"></div><div class="summary-text">${esc(summary)}</div></div>`:''}
+      ${experiences.length?`<div class="section-block"><div class="cv-section-title"></div>${expBlocks}</div>`:''}
+      ${educations.length?`<div class="section-block"><div class="cv-section-title"></div>${eduBlocks}</div>`:''}
+      ${courses.length?`<div class="section-block"><div class="cv-section-title"></div>${courseBlocks}</div>`:''}
     </div><div class="cv-side">
-      ${bars?`<div class="section-block"><div class="cv-section-title">Competências</div>${bars}</div>`:''}
-      ${languages.length?`<div class="section-block"><div class="cv-section-title">Idiomas</div>${langBlocks}</div>`:''}
+      ${bars?`<div class="section-block"><div class="cv-section-title"></div>${bars}</div>`:''}
+      ${languages.length?`<div class="section-block"><div class="cv-section-title"></div>${langBlocks}</div>`:''}
     </div></div>`;
   }
   else if (templateId === 2) {
@@ -71,13 +85,13 @@ export const renderCV = (templateId, data) => {
       </div>
     </div>
     <div class="cv-body"><div class="cv-main">
-      ${summary?`<div class="section-block"><div class="cv-section-title">Sobre Mim</div><div class="summary-text">${esc(summary)}</div></div>`:''}
-      ${experiences.length?`<div class="section-block"><div class="cv-section-title">Experiência</div>${expBlocks}</div>`:''}
-      ${educations.length?`<div class="section-block"><div class="cv-section-title">Formação</div>${eduBlocks}</div>`:''}
-      ${courses.length?`<div class="section-block"><div class="cv-section-title">Cursos</div>${courseBlocks}</div>`:''}
+      ${summary?`<div class="section-block"><div class="cv-section-title"></div><div class="summary-text">${esc(summary)}</div></div>`:''}
+      ${experiences.length?`<div class="section-block"><div class="cv-section-title"></div>${expBlocks}</div>`:''}
+      ${educations.length?`<div class="section-block"><div class="cv-section-title"></div>${eduBlocks}</div>`:''}
+      ${courses.length?`<div class="section-block"><div class="cv-section-title"></div>${courseBlocks}</div>`:''}
     </div><div class="cv-side">
-      ${pills?`<div class="side-section" style="margin-bottom:16px"><div class="cv-side-label">Competências</div><div style="display:flex;flex-wrap:wrap;gap:5px">${pills}</div></div>`:''}
-      ${languages.length?`<div class="side-section" style="margin-bottom:16px"><div class="cv-side-label">Idiomas</div>${langBlocks}</div>`:''}
+      ${pills?`<div class="side-section" style="margin-bottom:16px"><div class="cv-side-label"></div><div style="display:flex;flex-wrap:wrap;gap:5px">${pills}</div></div>`:''}
+      ${languages.length?`<div class="side-section" style="margin-bottom:16px"><div class="cv-side-label"></div>${langBlocks}</div>`:''}
     </div></div>`;
   }
   else if (templateId === 3) {
@@ -127,19 +141,19 @@ export const renderCV = (templateId, data) => {
         </div>
         
         <div class="t3-contact-box">
-          <h3 class="t3-side-title">Contato</h3>
+          <h3 class="t3-side-title"></h3>
           ${contacts.map(c=>`<div class="t3-contact-item">${c}</div>`).join('')}
         </div>
         
         ${sideSkills?`
         <div class="t3-side-sec">
-          <h3 class="t3-side-title">Habilidades Técnicas</h3>
+          <h3 class="t3-side-title"></h3>
           <div class="t3-badges">${sideSkills}</div>
         </div>`:''}
         
         ${sideLangs?`
         <div class="t3-side-sec">
-          <h3 class="t3-side-title">Idiomas</h3>
+          <h3 class="t3-side-title"></h3>
           <div class="t3-langs">${sideLangs}</div>
         </div>`:''}
       </aside>
@@ -147,13 +161,13 @@ export const renderCV = (templateId, data) => {
       <main class="t3-main">
         ${summary?`
         <section class="t3-section">
-          <h2 class="t3-sec-title">Perfil Profissional</h2>
+          <h2 class="t3-sec-title"></h2>
           <p class="t3-summary">${esc(summary)}</p>
         </section>`:''}
         
         ${expMain?`
         <section class="t3-section">
-          <h2 class="t3-sec-title">Experiência Profissional</h2>
+          <h2 class="t3-sec-title"></h2>
           <div class="t3-timeline">${expMain}</div>
         </section>`:''}
         
@@ -186,13 +200,13 @@ export const renderCV = (templateId, data) => {
       </div>
     </div>
     <div class="cv-body"><div class="cv-main">
-      ${summary?`<div class="section-block"><div class="cv-section-title">Perfil</div><div class="summary-text">${esc(summary)}</div></div>`:''}
-      ${experiences.length?`<div class="section-block"><div class="cv-section-title">Experiência</div>${expBlocks}</div>`:''}
-      ${educations.length?`<div class="section-block"><div class="cv-section-title">Formação</div>${eduBlocks}</div>`:''}
-      ${courses.length?`<div class="section-block"><div class="cv-section-title">Cursos</div>${courseBlocks}</div>`:''}
+      ${summary?`<div class="section-block"><div class="cv-section-title"></div><div class="summary-text">${esc(summary)}</div></div>`:''}
+      ${experiences.length?`<div class="section-block"><div class="cv-section-title"></div>${expBlocks}</div>`:''}
+      ${educations.length?`<div class="section-block"><div class="cv-section-title"></div>${eduBlocks}</div>`:''}
+      ${courses.length?`<div class="section-block"><div class="cv-section-title"></div>${courseBlocks}</div>`:''}
     </div><div class="cv-side">
-      ${bullets?`<div class="side-section"><div class="cv-section-title">Competências</div>${bullets}</div>`:''}
-      ${languages.length?`<div class="side-section"><div class="cv-section-title">Idiomas</div>${langBlocks}</div>`:''}
+      ${bullets?`<div class="side-section"><div class="cv-section-title"></div>${bullets}</div>`:''}
+      ${languages.length?`<div class="side-section"><div class="cv-section-title"></div>${langBlocks}</div>`:''}
     </div></div>`;
   }
   else if (templateId === 5) {
@@ -208,13 +222,13 @@ export const renderCV = (templateId, data) => {
       <div class="cv-contact-vert">${contacts.map(c=>`<div class="cv-contact-item">${c}</div>`).join('')}</div>
     </div><div class="cv-accent-bar"></div>
     <div class="cv-body"><div class="cv-main">
-      ${summary?`<div class="section-block"><div class="cv-section-title">Sobre</div><div class="summary-text">${esc(summary)}</div></div>`:''}
-      ${experiences.length?`<div class="section-block"><div class="cv-section-title">Experiência</div>${expBlocks}</div>`:''}
-      ${educations.length?`<div class="section-block"><div class="cv-section-title">Formação</div>${eduBlocks}</div>`:''}
-      ${courses.length?`<div class="section-block"><div class="cv-section-title">Cursos</div>${courseBlocks}</div>`:''}
+      ${summary?`<div class="section-block"><div class="cv-section-title"></div><div class="summary-text">${esc(summary)}</div></div>`:''}
+      ${experiences.length?`<div class="section-block"><div class="cv-section-title"></div>${expBlocks}</div>`:''}
+      ${educations.length?`<div class="section-block"><div class="cv-section-title"></div>${eduBlocks}</div>`:''}
+      ${courses.length?`<div class="section-block"><div class="cv-section-title"></div>${courseBlocks}</div>`:''}
     </div><div class="cv-side">
-      ${chips?`<div class="section-block"><div class="cv-section-title">Skills</div>${chips}</div>`:''}
-      ${languages.length?`<div class="section-block"><div class="cv-section-title">Idiomas</div>${langBlocks}</div>`:''}
+      ${chips?`<div class="section-block"><div class="cv-section-title"></div>${chips}</div>`:''}
+      ${languages.length?`<div class="section-block"><div class="cv-section-title"></div>${langBlocks}</div>`:''}
     </div></div>`;
   }
   else if (templateId === 6) {
@@ -227,20 +241,20 @@ export const renderCV = (templateId, data) => {
     innerHTML = `<div class="cv-wrap">
       <aside class="t6-side">
         <div class="t6-avatar" style="overflow:hidden;">${avatarInner}</div>
-        <div class="t6-side-sec"><div class="t6-side-label">Contacto</div><div class="t6-side-rule"></div>
+        <div class="t6-side-sec"><div class="t6-side-label"></div><div class="t6-side-rule"></div>
           ${[esc(email),esc(phone),esc(location),esc(linkedin)].filter(Boolean).map(c=>`<div class="t6-contact-line">${c}</div>`).join('')}
         </div>
-        ${langSide?`<div class="t6-side-sec"><div class="t6-side-label">Idiomas</div><div class="t6-side-rule"></div>${langSide}</div>`:''}
-        ${skillBars?`<div class="t6-side-sec"><div class="t6-side-label">Competências</div><div class="t6-side-rule"></div>${skillBars}</div>`:''}
+        ${langSide?`<div class="t6-side-sec"><div class="t6-side-label"></div><div class="t6-side-rule"></div>${langSide}</div>`:''}
+        ${skillBars?`<div class="t6-side-sec"><div class="t6-side-label"></div><div class="t6-side-rule"></div>${skillBars}</div>`:''}
       </aside>
       <main class="t6-main">
         <div class="t6-name">${esc(first)?esc(first)+' ':''}<strong>${esc(last)}</strong></div>
         <div class="t6-job">${esc(title)||'Cargo Profissional'}</div>
         <div class="t6-rule"></div>
         ${summary?`<p class="t6-summary">${esc(summary)}</p>`:''}
-        ${expMain?`<div class="t6-sec-gap"><div class="t6-sec-title">Experiência Profissional</div>${expMain}</div>`:''}
-        ${eduMain?`<div class="t6-sec-gap"><div class="t6-sec-title">Formação Académica</div>${eduMain}</div>`:''}
-        ${courseMain?`<div class="t6-sec-gap"><div class="t6-sec-title">Certificações</div>${courseMain}</div>`:''}
+        ${expMain?`<div class="t6-sec-gap"><div class="t6-sec-title"></div>${expMain}</div>`:''}
+        ${eduMain?`<div class="t6-sec-gap"><div class="t6-sec-title"></div>${eduMain}</div>`:''}
+        ${courseMain?`<div class="t6-sec-gap"><div class="t6-sec-title"></div>${courseMain}</div>`:''}
       </main>
     </div>`;
   }
@@ -260,10 +274,10 @@ export const renderCV = (templateId, data) => {
           <div class="t7-stitle">${esc(title)||'Cargo'}</div>
         </div>
         <div class="t7-side-body">
-          <div class="t7-slabel">Contacto</div><div class="t7-srule"></div>
+          <div class="t7-slabel"></div><div class="t7-srule"></div>
           ${contacts.map(c=>`<div class="t7-contact">${c}</div>`).join('')}
-          ${sideLangs?`<div class="t7-slabel">Idiomas</div><div class="t7-srule"></div>${sideLangs}`:''}
-          ${sideSkills?`<div class="t7-slabel">Competências</div><div class="t7-srule"></div><div style="margin-bottom:10px">${sideSkills}</div>`:''}
+          ${sideLangs?`<div class="t7-slabel"></div><div class="t7-srule"></div>${sideLangs}`:''}
+          ${sideSkills?`<div class="t7-slabel"></div><div class="t7-srule"></div><div style="margin-bottom:10px">${sideSkills}</div>`:''}
         </div>
       </aside>
       <div class="t7-main">
@@ -273,10 +287,10 @@ export const renderCV = (templateId, data) => {
           <div class="t7-mcontacts">${contacts.map(c=>`<span class="t7-mci">• ${c}</span>`).join('')}</div>
         </div>
         <div class="t7-mbody">
-          ${summary?`<div class="t7-secblock"><div class="t7-sectitle">Sobre Mim</div><div class="t7-summary">${esc(summary)}</div></div>`:''}
-          ${expMain?`<div class="t7-secblock"><div class="t7-sectitle">Experiência Profissional</div>${expMain}</div>`:''}
-          ${eduMain?`<div class="t7-secblock"><div class="t7-sectitle">Formação Académica</div>${eduMain}</div>`:''}
-          ${courseMain?`<div class="t7-secblock"><div class="t7-sectitle">Cursos</div>${courseMain}</div>`:''}
+          ${summary?`<div class="t7-secblock"><div class="t7-sectitle"></div><div class="t7-summary">${esc(summary)}</div></div>`:''}
+          ${expMain?`<div class="t7-secblock"><div class="t7-sectitle"></div>${expMain}</div>`:''}
+          ${eduMain?`<div class="t7-secblock"><div class="t7-sectitle"></div>${eduMain}</div>`:''}
+          ${courseMain?`<div class="t7-secblock"><div class="t7-sectitle"></div>${courseMain}</div>`:''}
         </div>
       </div>
     </div>`;
@@ -290,7 +304,7 @@ export const renderCV = (templateId, data) => {
       
       <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;">
         <div>
-          <h2 style="font-size:16px;margin:0 0 10px 0;text-transform:uppercase;border-bottom:1px solid #ccc;">Dados Pessoais</h2>
+          <h2 style="font-size:16px;margin:0 0 10px 0;text-transform:uppercase;border-bottom:1px solid #ccc;"></h2>
           <table style="font-size:12px;width:100%;">
             <tr><td style="width:120px;font-weight:bold;">Nome:</td><td>${esc(name)}</td></tr>
             ${dataNascimento?`<tr><td style="font-weight:bold;">Data de Nasc.:</td><td>${esc(dataNascimento)}</td></tr>`:''}
@@ -307,7 +321,7 @@ export const renderCV = (templateId, data) => {
 
       ${summary ? `
       <div style="margin-bottom:20px;">
-        <h2 style="font-size:14px;margin:0 0 10px 0;text-transform:uppercase;border-bottom:1px solid #ccc;">Perfil Profissional</h2>
+        <h2 style="font-size:14px;margin:0 0 10px 0;text-transform:uppercase;border-bottom:1px solid #ccc;"></h2>
         <p style="font-size:12px;text-align:justify;">${esc(summary)}</p>
       </div>` : ''}
 
@@ -321,7 +335,7 @@ export const renderCV = (templateId, data) => {
 
       ${experiences.length ? `
       <div style="margin-bottom:20px;">
-        <h2 style="font-size:14px;margin:0 0 10px 0;text-transform:uppercase;border-bottom:1px solid #ccc;">Experiência Profissional</h2>
+        <h2 style="font-size:14px;margin:0 0 10px 0;text-transform:uppercase;border-bottom:1px solid #ccc;"></h2>
         <ul style="font-size:12px;padding-left:20px;margin:0;">
           ${experiences.map(e=> `<li style="margin-bottom:8px;"><strong>${esc(e.period)}:</strong> ${esc(e.company)}<br/><em>Cargo:</em> ${esc(e.role)}<br/>${esc(e.desc)}</li>`).join('')}
         </ul>
@@ -329,7 +343,7 @@ export const renderCV = (templateId, data) => {
 
       ${courses.length ? `
       <div style="margin-bottom:20px;">
-        <h2 style="font-size:14px;margin:0 0 10px 0;text-transform:uppercase;border-bottom:1px solid #ccc;">Cursos e Certificações</h2>
+        <h2 style="font-size:14px;margin:0 0 10px 0;text-transform:uppercase;border-bottom:1px solid #ccc;"></h2>
         <ul style="font-size:12px;padding-left:20px;margin:0;">
           ${courses.map(c=> `<li><strong>${esc(c.year)}:</strong> ${esc(c.name)} - ${esc(c.institution)}</li>`).join('')}
         </ul>
@@ -338,7 +352,7 @@ export const renderCV = (templateId, data) => {
       <div style="display:flex;gap:40px;margin-bottom:20px;">
         ${languages.length ? `
         <div style="flex:1;">
-          <h2 style="font-size:14px;margin:0 0 10px 0;text-transform:uppercase;border-bottom:1px solid #ccc;">Idiomas</h2>
+          <h2 style="font-size:14px;margin:0 0 10px 0;text-transform:uppercase;border-bottom:1px solid #ccc;"></h2>
           <ul style="font-size:12px;padding-left:20px;margin:0;">
             ${languages.map(l=> `<li>${esc(l.name)} - ${esc(l.level)}</li>`).join('')}
           </ul>
@@ -363,19 +377,19 @@ export const renderCV = (templateId, data) => {
     innerHTML = `<div class="t9-wrap">
       <aside class="t9-side">
         <div class="t9-avatar-wrap"><div class="t9-avatar">${avatarInner}</div></div>
-        <div class="t9-side-block"><div class="t9-s-title">Contacto</div>
+        <div class="t9-side-block"><div class="t9-s-title"></div>
           ${contacts.map(c=>`<div class="t9-contact-line">${c}</div>`).join('')}
         </div>
-        ${sideSkills?`<div class="t9-side-block"><div class="t9-s-title">Competências</div>${sideSkills}</div>`:''}
-        ${sideLangs?`<div class="t9-side-block"><div class="t9-s-title">Idiomas</div>${sideLangs}</div>`:''}
+        ${sideSkills?`<div class="t9-side-block"><div class="t9-s-title"></div>${sideSkills}</div>`:''}
+        ${sideLangs?`<div class="t9-side-block"><div class="t9-s-title"></div>${sideLangs}</div>`:''}
       </aside>
       <main class="t9-main">
         <div class="t9-name">${esc(name)||'Seu Nome'}</div>
         <div class="t9-title">${esc(title)||'Cargo'}</div>
         ${summary?`<div class="t9-summary">${esc(summary)}</div>`:''}
-        ${expMain?`<div class="t9-section"><div class="t9-sec-title">Experiência Profissional</div>${expMain}</div>`:''}
-        ${eduMain?`<div class="t9-section"><div class="t9-sec-title">Formação Académica</div>${eduMain}</div>`:''}
-        ${courseMain?`<div class="t9-section"><div class="t9-sec-title">Certificações</div>${courseMain}</div>`:''}
+        ${expMain?`<div class="t9-section"><div class="t9-sec-title"></div>${expMain}</div>`:''}
+        ${eduMain?`<div class="t9-section"><div class="t9-sec-title"></div>${eduMain}</div>`:''}
+        ${courseMain?`<div class="t9-section"><div class="t9-sec-title"></div>${courseMain}</div>`:''}
       </main>
     </div>`;
   }
@@ -400,15 +414,101 @@ export const renderCV = (templateId, data) => {
       </div>
       <div class="t10-body">
         <div class="t10-main">
-          ${summary?`<div class="t10-sec"><div class="t10-sec-title">Resumo Profissional</div><div class="t10-summary">${esc(summary)}</div></div>`:''}
-          ${expMain?`<div class="t10-sec"><div class="t10-sec-title">Experiência</div>${expMain}</div>`:''}
-          ${eduMain?`<div class="t10-sec"><div class="t10-sec-title">Formação</div>${eduMain}</div>`:''}
-          ${courseMain?`<div class="t10-sec"><div class="t10-sec-title">Cursos</div>${courseMain}</div>`:''}
+          ${summary?`<div class="t10-sec"><div class="t10-sec-title"></div><div class="t10-summary">${esc(summary)}</div></div>`:''}
+          ${expMain?`<div class="t10-sec"><div class="t10-sec-title"></div>${expMain}</div>`:''}
+          ${eduMain?`<div class="t10-sec"><div class="t10-sec-title"></div>${eduMain}</div>`:''}
+          ${courseMain?`<div class="t10-sec"><div class="t10-sec-title"></div>${courseMain}</div>`:''}
         </div>
         <div class="t10-side">
-          ${sideSkills?`<div class="t10-sec"><div class="t10-sec-title">Skills</div><div class="t10-skills-flex">${sideSkills}</div></div>`:''}
-          ${sideLangs?`<div class="t10-sec"><div class="t10-sec-title">Idiomas</div>${sideLangs}</div>`:''}
+          ${sideSkills?`<div class="t10-sec"><div class="t10-sec-title"></div><div class="t10-skills-flex">${sideSkills}</div></div>`:''}
+          ${sideLangs?`<div class="t10-sec"><div class="t10-sec-title"></div>${sideLangs}</div>`:''}
         </div>
+      </div>
+    </div>`;
+  }
+
+  else if (templateId === 11) {
+    const avatarInner = photo ? `<img src="${photo}" style="width:100%;height:100%;object-fit:cover;">` : initials;
+    const contacts=[esc(email),esc(phone),esc(location),esc(linkedin)].filter(Boolean);
+    const sideSkills=skills.map(s=>`<div class="t11-skill">${esc(s)}</div>`).join('');
+    const sideLangs=languages.map(l=>`<div class="t11-lang"><span>${esc(l.name)}</span><span>${esc(l.level)}</span></div>`).join('');
+    const expMain=experiences.map(e=>`<div class="t11-item"><div class="t11-item-title">${esc(e.role)||'Cargo'}</div><div class="t11-item-sub">${esc(e.company)} | ${esc(e.period)}</div>${e.desc?`<div class="t11-item-desc">${esc(e.desc)}</div>`:''}</div>`).join('');
+    const eduMain=educations.map(e=>`<div class="t11-item"><div class="t11-item-title">${esc(e.degree)||'Curso'}</div><div class="t11-item-sub">${esc(e.institution)} | ${esc(e.period)}</div></div>`).join('');
+    
+    innerHTML = `<div class="t11-wrap">
+      <aside class="t11-side">
+        <div class="t11-avatar">${avatarInner}</div>
+        <div class="t11-name">${esc(name)||'Seu Nome'}</div>
+        <div class="t11-title">${esc(title)||'Cargo'}</div>
+        <div class="t11-section"><div class="t11-sec-title">${t.contact}</div>${contacts.map(c=>`<div class="t11-contact">${c}</div>`).join('')}</div>
+        ${sideSkills?`<div class="t11-section"><div class="t11-sec-title">${t.skills}</div><div class="t11-skills-grid">${sideSkills}</div></div>`:''}
+        ${sideLangs?`<div class="t11-section"><div class="t11-sec-title">${t.languages}</div>${sideLangs}</div>`:''}
+      </aside>
+      <main class="t11-main">
+        ${summary?`<div class="t11-section"><div class="t11-sec-title-main">${t.profile}</div><div class="t11-summary">${esc(summary)}</div></div>`:''}
+        ${expMain?`<div class="t11-section"><div class="t11-sec-title-main">${t.experience}</div>${expMain}</div>`:''}
+        ${eduMain?`<div class="t11-section"><div class="t11-sec-title-main">${t.education}</div>${eduMain}</div>`:''}
+      </main>
+    </div>`;
+  }
+  else if (templateId === 12) {
+    const contacts=[esc(email),esc(phone),esc(location),esc(linkedin)].filter(Boolean);
+    const sideSkills=skills.join(', ');
+    const sideLangs=languages.map(l=>`${esc(l.name)} (${esc(l.level)})`).join('<br>');
+    const expMain=experiences.map(e=>`<div class="t12-item"><div class="t12-date">${esc(e.period)}</div><div class="t12-content"><div class="t12-role">${esc(e.role)||'Cargo'}</div><div class="t12-co">${esc(e.company)}</div>${e.desc?`<div class="t12-desc">${esc(e.desc)}</div>`:''}</div></div>`).join('');
+    const eduMain=educations.map(e=>`<div class="t12-item"><div class="t12-date">${esc(e.period)}</div><div class="t12-content"><div class="t12-role">${esc(e.degree)||'Curso'}</div><div class="t12-co">${esc(e.institution)}</div></div></div>`).join('');
+    
+    innerHTML = `<div class="t12-wrap">
+      <div class="t12-header">
+        <h1 class="t12-top-title">Curriculum vitae</h1>
+        <div class="t12-sdetails">
+          <div class="t12-sec-title">${t.details}</div>
+          <table class="t12-table">
+            <tr><td class="t12-td-label">Name</td><td>${esc(name)}</td></tr>
+            ${location?`<tr><td class="t12-td-label">Address</td><td>${esc(location)}</td></tr>`:''}
+            ${phone?`<tr><td class="t12-td-label">Phone</td><td>${esc(phone)}</td></tr>`:''}
+            ${email?`<tr><td class="t12-td-label">Email</td><td>${esc(email)}</td></tr>`:''}
+            ${linkedin?`<tr><td class="t12-td-label">LinkedIn</td><td>${esc(linkedin)}</td></tr>`:''}
+          </table>
+        </div>
+      </div>
+      <div class="t12-body">
+        ${summary?`<div class="t12-section"><div class="t12-sec-title">${t.profile}</div><div class="t12-text">${esc(summary)}</div></div>`:''}
+        ${expMain?`<div class="t12-section"><div class="t12-sec-title">${t.experience}</div>${expMain}</div>`:''}
+        ${eduMain?`<div class="t12-section"><div class="t12-sec-title">${t.education}</div>${eduMain}</div>`:''}
+        <div class="t12-bottom-grid">
+          ${sideSkills?`<div><div class="t12-sec-title">${t.skills}</div><div class="t12-text">${sideSkills}</div></div>`:''}
+          ${sideLangs?`<div><div class="t12-sec-title">${t.languages}</div><div class="t12-text">${sideLangs}</div></div>`:''}
+        </div>
+      </div>
+    </div>`;
+  }
+  else if (templateId === 13) {
+    const contacts=[esc(email),esc(phone),esc(location),esc(linkedin)].filter(Boolean);
+    const sideSkills=skills.map(s=>`<div class="t13-skill">${esc(s)}</div>`).join('');
+    const sideLangs=languages.map(l=>`<div class="t13-lang"><span>${esc(l.name)}</span><span>${esc(l.level)}</span></div>`).join('');
+    const expMain=experiences.map(e=>`<div class="t13-item"><div class="t13-date">${esc(e.period).replace('—','-')}</div><div class="t13-content"><div class="t13-role">${esc(e.role)||'Cargo'}</div><div class="t13-co">${esc(e.company)}</div>${e.desc?`<div class="t13-desc">${esc(e.desc)}</div>`:''}</div></div>`).join('');
+    const eduMain=educations.map(e=>`<div class="t13-item"><div class="t13-date">${esc(e.period).replace('—','-')}</div><div class="t13-content"><div class="t13-role">${esc(e.degree)||'Curso'}</div><div class="t13-co">${esc(e.institution)}</div></div></div>`).join('');
+    
+    innerHTML = `<div class="t13-wrap">
+      <div class="t13-header">
+        <h1 class="t13-header-title">Curriculum Vitae</h1>
+      </div>
+      <div class="t13-body">
+        <aside class="t13-side">
+          <div class="t13-section"><div class="t13-sec-title">${t.details.toUpperCase()}</div>
+            <div class="t13-name">${esc(name)||'Seu Nome'}</div>
+            <div class="t13-address">${esc(location)}</div>
+            <div class="t13-contact-box">${[esc(phone), esc(email), esc(linkedin)].filter(Boolean).map(c=>`<div class="t13-contact">${c}</div>`).join('')}</div>
+          </div>
+          ${sideSkills?`<div class="t13-section"><div class="t13-sec-title">${t.skills.toUpperCase()}</div><div class="t13-skills-bx">${sideSkills}</div></div>`:''}
+          ${sideLangs?`<div class="t13-section"><div class="t13-sec-title">${t.languages.toUpperCase()}</div>${sideLangs}</div>`:''}
+        </aside>
+        <main class="t13-main">
+          ${summary?`<div class="t13-section-m"><div class="t13-sec-title-m">PROFILE</div><div class="t13-summary">${esc(summary)}</div></div>`:''}
+          ${expMain?`<div class="t13-section-m"><div class="t13-sec-title-m">${t.experience.toUpperCase()}</div>${expMain}</div>`:''}
+          ${eduMain?`<div class="t13-section-m"><div class="t13-sec-title-m">${t.education.toUpperCase()}</div>${eduMain}</div>`:''}
+        </main>
       </div>
     </div>`;
   }
