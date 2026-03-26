@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { renderCV } from '../components/CVRenderer';
 import '../components/CVRenderer.css';
@@ -7,16 +7,24 @@ import axios from 'axios';
 
 const CVBuilder = () => {
   const navigate = useNavigate();
-  const [data, setData] = useState({
-    name: '', title: '', email: '', phone: '', location: '', linkedin: '',
-    nacionalidade: '', dataNascimento: '', estadoCivil: '', bi: '', photo: null,
-    summary: '',
-    experiences: [], educations: [], courses: [], languages: [], skills: []
+  const [data, setData] = useState(() => {
+    const saved = localStorage.getItem('cv_data');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {}
+    }
+    return {
+      name: '', title: '', email: '', phone: '', location: '', linkedin: '',
+      nacionalidade: '', dataNascimento: '', estadoCivil: '', bi: '', photo: null,
+      summary: '',
+      experiences: [], educations: [], courses: [], languages: [], skills: []
+    };
   });
 
-  const [template, setTemplate] = useState(1);
+  const [template, setTemplate] = useState(() => Number(localStorage.getItem('cv_template')) || 1);
   const [activeTab, setActiveTab] = useState('pessoais');
-  const [lang, setLang] = useState('pt');
+  const [lang, setLang] = useState(() => localStorage.getItem('cv_lang') || 'pt');
   const [showAiModal, setShowAiModal] = useState(false);
   const [aiText, setAiText] = useState('');
   const [aiLoading, setAiLoading] = useState(false);
@@ -24,10 +32,17 @@ const CVBuilder = () => {
   const [useAi, setUseAi] = useState(true);
   const [autoSummary, setAutoSummary] = useState(true);
   const [skillInput, setSkillInput] = useState('');
-  const [theme, setTheme] = useState('dark');
+  const [theme, setTheme] = useState(() => localStorage.getItem('cv_theme') || 'dark');
   const [showPreview, setShowPreview] = useState(false);
   const [alertMsg, setAlertMsg] = useState(null);
   const pdfRef = useRef(null);
+
+  useEffect(() => {
+    localStorage.setItem('cv_data', JSON.stringify(data));
+    localStorage.setItem('cv_template', template);
+    localStorage.setItem('cv_lang', lang);
+    localStorage.setItem('cv_theme', theme);
+  }, [data, template, lang, theme]);
 
   const colors = theme === 'dark'
     ? { bg1: '#09090b', bg2: '#18181b', border: '#27272a', text1: '#fafafa', text2: '#a1a1aa', btnBg: '#fafafa', btnText: '#09090b' }

@@ -9,6 +9,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleGoogleSuccess = async (credentialResponse) => {
@@ -55,8 +56,22 @@ const Login = () => {
           <input type="email" placeholder="E-mail" required value={email} onChange={e => setEmail(e.target.value)} 
             style={{ width: '100%', padding: '12px', borderRadius: '6px', background: '#09090b', border: '1px solid #3f3f46', color: '#fff', outline: 'none' }} />
           
-          <input type="password" placeholder="Senha" required value={password} onChange={e => setPassword(e.target.value)} 
-            style={{ width: '100%', padding: '12px', borderRadius: '6px', background: '#09090b', border: '1px solid #3f3f46', color: '#fff', outline: 'none' }} />
+          <div style={{ position: 'relative' }}>
+            <input type={showPassword ? "text" : "password"} placeholder="Senha" required value={password} onChange={e => setPassword(e.target.value)} 
+              style={{ width: '100%', padding: '12px', paddingRight: '44px', borderRadius: '6px', background: '#09090b', border: '1px solid #3f3f46', color: '#fff', outline: 'none' }} />
+            <button 
+              type="button" 
+              onClick={() => setShowPassword(!showPassword)}
+              style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: '#a1a1aa', cursor: 'pointer', padding: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+              title={showPassword ? "Ocultar senha" : "Ver senha"}
+            >
+              {showPassword ? (
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+              )}
+            </button>
+          </div>
           
           <button type="submit" style={{ background: '#fafafa', color: '#09090b', border: 'none', padding: '12px', borderRadius: '6px', fontWeight: 'bold', cursor: 'pointer', marginTop: '8px' }}>
             {isRegister ? 'Registar' : 'Entrar'}
