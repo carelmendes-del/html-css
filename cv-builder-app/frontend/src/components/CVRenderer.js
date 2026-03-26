@@ -81,27 +81,97 @@ export const renderCV = (templateId, data) => {
     </div></div>`;
   }
   else if (templateId === 3) {
-    const pills=skills.map(s=>`<span class="skill-pill">${s}</span>`).join('');
-    innerHTML = `<div class="cv-header">
-      ${avatarHtml}
-      <div class="header-txt" style="${photo ? 'text-align:left;' : 'text-align:center;width:100%;'}">
-        <div class="cv-name">${esc(name)||'Seu Nome'}</div><div class="cv-title">${esc(title)||'Cargo'}</div>
-        <div class="cv-contact">${[esc(email),esc(phone),esc(location)].filter(Boolean).map(i=>`<span>${i}</span>`).join('')}</div>
-      </div>
-    </div><div class="cv-divider"></div>
-    <div class="cv-body">
-      ${summary?`<div class="section-block"><div class="cv-section-title">Perfil</div><div class="summary-text">${esc(summary)}</div><hr class="section-divider"></div>`:''}
-      ${experiences.length?`<div class="section-block"><div class="cv-section-title">Experiência</div><div class="two-col">${expBlocks}</div><hr class="section-divider"></div>`:''}
-      <div class="two-col">
-        <div>
-          ${educations.length?`<div class="section-block"><div class="cv-section-title">Formação</div>${eduBlocks}</div>`:''}
-          ${courses.length?`<div class="section-block"><div class="cv-section-title">Cursos</div>${courseBlocks}</div>`:''}
+    const contacts=[esc(email),esc(phone),esc(location),esc(linkedin)].filter(Boolean);
+    const sideSkills=skills.map(s=>`<span class="t3-badge">${esc(s)}</span>`).join('');
+    const sideLangs=languages.map(l=>`<div class="t3-lang"><span>${esc(l.name)}</span><span class="t3-lang-lv">${esc(l.level)}</span></div>`).join('');
+    
+    const expMain=experiences.map(e=>`
+      <div class="t3-item">
+        <div class="t3-item-header">
+          <div class="t3-item-rolebase">
+            <h3 class="t3-role">${esc(e.role)||'Cargo'}</h3>
+            <span class="t3-company">${esc(e.company)}</span>
+          </div>
+          <div class="t3-date">${esc(e.period)}</div>
         </div>
-        <div>
-          ${pills?`<div class="section-block"><div class="cv-section-title">Competências</div><div style="display:flex;flex-wrap:wrap;gap:5px">${pills}</div></div>`:''}
-          ${languages.length?`<div class="section-block"><div class="cv-section-title">Idiomas</div>${langBlocks}</div>`:''}
+        ${e.desc ? `<p class="t3-desc">${esc(e.desc)}</p>` : ''}
+      </div>`).join('');
+
+    const eduMain=educations.map(e=>`
+      <div class="t3-item">
+        <div class="t3-item-header">
+          <div class="t3-item-rolebase">
+            <h3 class="t3-role">${esc(e.degree)||'Curso'}</h3>
+            <span class="t3-company">${esc(e.institution)}</span>
+          </div>
+          <div class="t3-date">${esc(e.period)}</div>
         </div>
-      </div>
+      </div>`).join('');
+
+    const courseMain=courses.map(c=>`
+      <div class="t3-item">
+        <div class="t3-item-header">
+          <div class="t3-item-rolebase">
+            <h3 class="t3-role">${esc(c.name)||'Certificação'}</h3>
+            <span class="t3-company">${esc(c.institution)}</span>
+          </div>
+          <div class="t3-date">${esc(c.year)}</div>
+        </div>
+      </div>`).join('');
+
+    innerHTML = `<div class="t3-wrap">
+      <aside class="t3-sidebar">
+        <div class="t3-brand">
+          <h1 class="t3-name">${esc(name)||'Seu Nome'}</h1>
+          <h2 class="t3-title">${esc(title)||'Cargo Profissional'}</h2>
+        </div>
+        
+        <div class="t3-contact-box">
+          <h3 class="t3-side-title">Contato</h3>
+          ${contacts.map(c=>`<div class="t3-contact-item">${c}</div>`).join('')}
+        </div>
+        
+        ${sideSkills?`
+        <div class="t3-side-sec">
+          <h3 class="t3-side-title">Habilidades Técnicas</h3>
+          <div class="t3-badges">${sideSkills}</div>
+        </div>`:''}
+        
+        ${sideLangs?`
+        <div class="t3-side-sec">
+          <h3 class="t3-side-title">Idiomas</h3>
+          <div class="t3-langs">${sideLangs}</div>
+        </div>`:''}
+      </aside>
+
+      <main class="t3-main">
+        ${summary?`
+        <section class="t3-section">
+          <h2 class="t3-sec-title">Perfil Profissional</h2>
+          <p class="t3-summary">${esc(summary)}</p>
+        </section>`:''}
+        
+        ${expMain?`
+        <section class="t3-section">
+          <h2 class="t3-sec-title">Experiência Profissional</h2>
+          <div class="t3-timeline">${expMain}</div>
+        </section>`:''}
+        
+        ${eduMain?`
+        <section class="t3-section">
+          <h2 class="t3-sec-title">Formação Acadêmica</h2>
+          <div class="t3-timeline">${eduMain}</div>
+        </section>`:''}
+        
+        ${courseMain?`
+        <section class="t3-section">
+          <h2 class="t3-sec-title" style="display: flex; alignItems: center; gap: 0.5rem;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="1.2rem" height="1.2rem" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#6C5CE7;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            Certificações
+          </h2>
+          <div class="t3-timeline">${courseMain}</div>
+        </section>`:''}
+      </main>
     </div>`;
   }
   else if (templateId === 4) {

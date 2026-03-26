@@ -60,36 +60,187 @@
 #cv-output.t2 .course-item{font-size:10px;color:#334155;margin-bottom:8px;padding-left:8px;border-left:2px solid #059669;}
 #cv-output.t2 .course-inst{font-size:9px;color:#94a3b8;margin-top:2px;}
 
-/* T3 ELEGANTE ROXO (Refined Centered Layout) */
-#cv-output.t3{font-family:'DM Sans',sans-serif;background:#fff;}
-#cv-output.t3 .cv-header{background:linear-gradient(135deg,#f3e8ff,#d8b4fe);padding:50px 60px 40px;color:#3b0764;text-align:center;position:relative;overflow:hidden;}
-#cv-output.t3 .cv-header::before{content:'';position:absolute;top:-60px;right:-40px;width:180px;height:180px;background:#c084fc;border-radius:50%;opacity:0.15;}
-#cv-output.t3 .header-txt{text-align:center;width:100%;}
-#cv-output.t3 .cv-avatar-box{margin:0 auto 20px;width:110px;height:110px;border-color:#fff;box-shadow:0 12px 30px rgba(107,33,168,0.2);}
-#cv-output.t3 .header-inner{flex-direction:column;align-items:center;justify-content:center;}
-#cv-output.t3 .cv-name{font-size:38px;font-weight:900;letter-spacing:1px;margin-bottom:8px;font-family:'Playfair Display',serif;color:#3b0764;}
-#cv-output.t3 .cv-title{font-size:12px;letter-spacing:4px;color:#7e22ce;text-transform:uppercase;margin-bottom:18px;font-weight:700;}
-#cv-output.t3 .cv-contact{display:flex;justify-content:center;gap:20px;font-size:11px;color:#581c87;flex-wrap:wrap;font-weight:600;}
-#cv-output.t3 .cv-divider{height:0;}
-#cv-output.t3 .cv-body{padding:40px 60px;}
-#cv-output.t3 .cv-section-title{font-size:18px;font-weight:800;color:#4c1d95;margin-bottom:20px;font-style:italic;display:flex;align-items:center;gap:14px;font-family:'Playfair Display',serif;text-align:center;}
-#cv-output.t3 .cv-section-title::before, #cv-output.t3 .cv-section-title::after{content:'';flex:1;height:1px;background:linear-gradient(to right,transparent,#e9d5ff,transparent);}
-#cv-output.t3 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:0 50px;align-items:flex-start;}
-#cv-output.t3 .exp-title{font-size:14px;font-weight:800;color:#3b0764;}
-#cv-output.t3 .exp-sub{font-size:11px;color:#7e22ce;margin-top:2px;font-weight:700;}
-#cv-output.t3 .exp-date{font-size:10px;color:#94a3b8;margin-top:2px;font-weight:500;}
-#cv-output.t3 .exp-desc{font-size:11px;color:#475569;margin-top:6px;line-height:1.75;}
-#cv-output.t3 .edu-title{font-size:13px;font-weight:800;color:#3b0764;}
-#cv-output.t3 .edu-sub{font-size:11px;color:#7e22ce;font-weight:600;}
-#cv-output.t3 .edu-date{font-size:10px;color:#94a3b8;font-weight:500;}
-#cv-output.t3 .section-block{margin-bottom:30px;}
-#cv-output.t3 .section-divider{border:none;border-top:1px dashed #e2e8f0;margin:24px 0;}
-#cv-output.t3 .skill-pill{display:inline-block;background:#faf5ff;border:1px solid #d8b4fe;color:#6b21a8;font-size:10px;padding:4px 12px;border-radius:12px;margin:3px 3px 3px 0;font-weight:600;}
-#cv-output.t3 .summary-text{font-size:13px;line-height:1.8;color:#475569;text-align:center;max-width:600px;margin:0 auto;}
-#cv-output.t3 .lang-row{display:flex;justify-content:space-between;font-size:12px;color:#475569;margin-bottom:8px;border-bottom:1px solid #f8fafc;padding-bottom:4px;}
-#cv-output.t3 .lang-level{color:#7e22ce;font-size:10px;font-weight:800;}
-#cv-output.t3 .course-item{font-size:11px;color:#475569;margin-bottom:10px;padding-left:10px;border-left:2px solid #a855f7;}
-#cv-output.t3 .course-inst{font-size:10px;color:#94a3b8;margin-top:2px;}
+/* T3 ELEGANTE ROXO (Refined Editorial & Cybersecurity UX) */
+#cv-output.t3 {
+  font-family: 'Inter', sans-serif;
+  background: #ffffff;
+  color: #334155;
+  line-height: 1.6;
+}
+#cv-output.t3 .t3-wrap {
+  display: flex;
+  min-height: 1123px;
+}
+#cv-output.t3 .t3-sidebar {
+  width: 30%;
+  background: #faf5ff; /* Soft lavender background */
+  padding: 3rem 2rem;
+  border-right: 1px solid #e9d5ff; /* Subtle elegant border instead of thick line */
+  display: flex;
+  flex-direction: column;
+  gap: 2.2rem;
+}
+#cv-output.t3 .t3-brand {
+  margin-bottom: 0.5rem;
+}
+#cv-output.t3 .t3-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #3b0764; /* Very dark elegant purple */
+  line-height: 1.1;
+  letter-spacing: -0.02rem;
+  margin: 0 0 0.5rem 0;
+}
+#cv-output.t3 .t3-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #7e22ce; /* Accent purple */
+  text-transform: uppercase;
+  letter-spacing: 0.2rem;
+  margin: 0;
+}
+#cv-output.t3 .t3-side-title {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #4a044e;
+  text-transform: uppercase;
+  letter-spacing: 0.15rem;
+  margin: 0 0 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+#cv-output.t3 .t3-side-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #d8b4fe;
+}
+#cv-output.t3 .t3-contact-item {
+  font-size: 0.75rem;
+  color: #475569;
+  margin-bottom: 0.6rem;
+  word-break: break-word;
+  font-weight: 500;
+}
+#cv-output.t3 .t3-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+#cv-output.t3 .t3-badge {
+  background: #ffffff;
+  color: #6b21a8;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  border: 1px solid #d8b4fe;
+  text-transform: uppercase;
+  letter-spacing: 0.05rem;
+}
+#cv-output.t3 .t3-langs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+#cv-output.t3 .t3-lang {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: #475569;
+  border-bottom: 1px dashed #e9d5ff;
+  padding-bottom: 0.3rem;
+  font-weight: 600;
+}
+#cv-output.t3 .t3-lang-lv {
+  color: #7e22ce;
+  font-weight: 800;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05rem;
+}
+#cv-output.t3 .t3-main {
+  width: 70%;
+  padding: 3.5rem 2.8rem;
+  background: #ffffff;
+}
+#cv-output.t3 .t3-section {
+  margin-bottom: 2.2rem;
+}
+#cv-output.t3 .t3-sec-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #3b0764;
+  margin: 0 0 1.2rem 0;
+  position: relative;
+  display: inline-block;
+  letter-spacing: 0.02rem;
+}
+#cv-output.t3 .t3-sec-title::after {
+  content: '';
+  position: absolute;
+  bottom: -0.3rem;
+  left: 0;
+  width: 3rem;
+  height: 2px;
+  background: #7e22ce;
+}
+#cv-output.t3 .t3-summary {
+  font-size: 0.8rem;
+  color: #475569;
+  line-height: 1.7;
+  margin: 0;
+  text-align: justify;
+}
+#cv-output.t3 .t3-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+#cv-output.t3 .t3-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.4rem;
+}
+#cv-output.t3 .t3-item-rolebase {
+  display: flex;
+  flex-direction: column;
+}
+#cv-output.t3 .t3-role {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #3b0764;
+  margin: 0;
+}
+#cv-output.t3 .t3-company {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #7e22ce;
+  margin-top: 0.15rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05rem;
+}
+#cv-output.t3 .t3-date {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #6b21a8;
+  background: #f3e8ff;
+  border: 1px solid #d8b4fe;
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  white-space: nowrap;
+  letter-spacing: 0.05rem;
+}
+#cv-output.t3 .t3-desc {
+  font-size: 0.8rem;
+  color: #475569;
+  line-height: 1.6;
+  margin: 0;
+}
 
 /* T4 MINIMALISTA VERMELHO (Premium Reimagined) */
 #cv-output.t4 .cv-header{padding:46px 50px 36px;background:#fff;position:relative;}
@@ -259,7 +410,7 @@
 #cv-output.t10 .t10-wrap{background:#fff;min-height:1123px;box-shadow:0 0 20px rgba(0,0,0,0.02);}
 #cv-output.t10 .t10-header{background:linear-gradient(135deg, #312e81, #4f46e5, #0ea5e9);color:#fff;padding:50px 60px;display:flex;justify-content:space-between;align-items:center;position:relative;}
 #cv-output.t10 .t10-h-left{max-width:70%;}
-#cv-output.t10 .t10-avatar{width:130px;height:130px;border-radius:12px;border:4px solid #fff;box-shadow:0 8px 24px rgba(0,0,0,0.25);overflow:hidden;position:absolute;bottom:-40px;right:60px;background:#e2e8f0;}
+#cv-output.t10 .t10-avatar{width:130px;height:130px;border-radius:12px;border:4px solid #fff;box-shadow:0 8px 24px rgba(0,0,0,0.25);overflow:hidden;background:#e2e8f0;}
 #cv-output.t10 .t10-name{font-size:42px;font-weight:900;letter-spacing:-1px;margin-bottom:8px;line-height:1;}
 #cv-output.t10 .t10-title{font-size:12px;color:#bae6fd;font-weight:800;letter-spacing:3px;text-transform:uppercase;}
 #cv-output.t10 .t10-top-contacts{background:#f1f5f9;padding:16px 60px;display:flex;gap:24px;font-size:11px;color:#334155;flex-wrap:wrap;font-weight:600;}

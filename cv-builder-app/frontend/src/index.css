@@ -58,9 +58,6 @@ body {
   width: 1126px;
   max-width: 100%;
   margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
@@ -158,5 +155,90 @@ code {
   }
   .mobile-mb-10 {
     margin-bottom: 10px !important;
+  }
+}
+
+/* === PRINT STYLES FOR HIGH QUALITY PDF EXPORT === */
+@media print {
+  /* Ensure background colors and images are printed */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Hide UI elements specifically */
+  .mobile-main-wrapper,
+  .mobile-preview-overlay,
+  .mobile-import-overlay {
+    display: none !important;
+  }
+
+  /* Reset layout constraints to allow full-page rendering without clipping */
+  html, body, #root, .cv-builder-root {
+    display: block !important;
+    height: auto !important;
+    min-height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    border: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: white !important;
+  }
+
+  #print-area {
+    display: block !important;
+    position: relative !important;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: visible !important;
+  }
+
+  @page {
+    size: A4 portrait;
+    margin: 0 !important;
+  }
+
+  /* =========================================================
+     [ATS & UX EXPORT] MODELO 10 (Executivo Premium)
+     Remover fundos intensos que gastam tinta ou rasterizam,
+     e garantir que parágrafos e cards não quebrem no meio da folha.
+     ========================================================= */
+  
+  #cv-output.t10 .t10-header {
+    background: white !important;
+    color: #000 !important;
+    padding: 30px 40px 10px 40px !important;
+    border-bottom: 2px solid #1e1b4b !important;
+  }
+  
+  #cv-output.t10 .t10-name,
+  #cv-output.t10 .t10-title,
+  #cv-output.t10 .t10-top-contacts {
+    color: #000 !important;
+    background: transparent !important;
+  }
+
+  #cv-output.t10 .t10-top-contacts {
+    padding: 10px 40px !important;
+    border-bottom: 1px dashed #cbd5e1 !important;
+  }
+  
+  #cv-output.t10 .t10-wrap {
+    box-shadow: none !important;
+    background: white !important;
+  }
+
+  #cv-output.t10 .t10-date {
+    color: #000 !important;
+    background: #f1f5f9 !important;
+    border: 1px solid #cbd5e1 !important;
+  }
+
+  /* Anti-Quebra de Página (Garante leitura limpa do recrutador/ATS) */
+  .t10-sec, .t10-card, .t10-skill-pill, .t10-lang-row {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
   }
 }
