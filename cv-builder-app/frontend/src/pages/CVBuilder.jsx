@@ -34,6 +34,8 @@ const CVBuilder = () => {
   const [skillInput, setSkillInput] = useState('');
   const [theme, setTheme] = useState(() => localStorage.getItem('cv_theme') || 'dark');
   const [showPreview, setShowPreview] = useState(false);
+  const [reviewData, setReviewData] = useState(null);
+  const [reviewLoading, setReviewLoading] = useState(false);
   const [alertMsg, setAlertMsg] = useState(null);
   const pdfRef = useRef(null);
 
@@ -44,16 +46,12 @@ const CVBuilder = () => {
     localStorage.setItem('cv_theme', theme);
   }, [data, template, lang, theme]);
 
-  const colors = theme === 'dark'
-    ? { bg1: '#09090b', bg2: '#18181b', border: '#27272a', text1: '#fafafa', text2: '#a1a1aa', btnBg: '#fafafa', btnText: '#09090b' }
-    : { bg1: '#f4f4f5', bg2: '#ffffff', border: '#e4e4e7', text1: '#09090b', text2: '#52525b', btnBg: '#09090b', btnText: '#fafafa' };
-
-  const shadow = theme === 'light' ? '0 4px 15px rgba(0,0,0,0.03)' : '0 4px 15px rgba(0,0,0,0.4)';
-  const inputStyle = { width: '100%', padding: '12px 16px', marginBottom: '14px', background: colors.bg1, border: `1px solid ${colors.border}`, borderRadius: '10px', color: colors.text1, fontSize: '13px', outline: 'none', transition: 'border 0.2s', boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.02)' };
-  const labelStyle = { display: 'block', fontSize: '11px', color: colors.text2, marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: '700' };
-  const cardStyle = { background: colors.bg2, border: `1px solid ${colors.border}`, padding: '24px', borderRadius: '14px', marginBottom: '16px', position: 'relative', boxShadow: shadow };
-  const removeBtnStyle = { position: 'absolute', top: '12px', right: '12px', background: '#fee2e2', border: 'none', color: '#ef4444', cursor: 'pointer', fontSize: '16px', width: '28px', height: '28px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' };
-  const addBtnStyle = { width: '100%', padding: '14px', border: `2px dashed ${colors.border}`, background: 'none', color: colors.text2, borderRadius: '12px', cursor: 'pointer', fontWeight: 'bold', transition: 'all 0.2s' };
+  // Using new universal variables
+  const inputStyle = { width: '100%', padding: '12px 16px', marginBottom: '14px', background: 'var(--bg-base)', border: '1px solid var(--border-strong)', borderRadius: '10px', color: 'var(--text-primary)', fontSize: '14px', outline: 'none', transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)' };
+  const labelStyle = { display: 'block', fontSize: '11px', color: 'var(--text-tertiary)', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.8px', fontWeight: '700' };
+  const cardStyle = { background: 'var(--bg-surface)', border: '1px solid var(--border-subtle)', padding: '24px', borderRadius: '16px', marginBottom: '16px', position: 'relative', boxShadow: 'var(--shadow-sm)' };
+  const removeBtnStyle = { position: 'absolute', top: '12px', right: '12px', background: 'rgba(239, 68, 68, 0.1)', border: 'none', color: '#ef4444', cursor: 'pointer', fontSize: '16px', width: '28px', height: '28px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' };
+  const addBtnStyle = { width: '100%', padding: '14px', border: '2px dashed var(--border-strong)', background: 'transparent', color: 'var(--text-secondary)', borderRadius: '12px', cursor: 'pointer', fontWeight: 'bold', transition: 'all 0.2s' };
 
   const handlePdfDownload = () => {
     setAlertMsg('Dica: Na janela de impressão, escolha "Guardar como PDF" ou "Save as PDF" como destino.\nIsso garante um documento com texto selecionável e máxima qualidade.');
@@ -66,6 +64,25 @@ const CVBuilder = () => {
       const reader = new FileReader();
       reader.onload = ev => setData({ ...data, photo: ev.target.result });
       reader.readAsDataURL(file);
+    }
+  };
+
+  const handleAiReview = async () => {
+    setShowPreview(true);
+    if (!reviewData) {
+      setReviewLoading(true);
+      try {
+        const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+        const res = await axios.post(`${BASE_URL}/api/ai/review`, { cvGerado: data }, {
+          headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }
+        });
+        setReviewData(res.data);
+      } catch (err) {
+        console.error(err);
+        setAlertMsg('Falha ao obter conselhos de IA. Verifique se o backend está ligado.');
+      } finally {
+        setReviewLoading(false);
+      }
     }
   };
 
@@ -285,23 +302,20 @@ ${aiText}
   const removeSkill = i => setData(p => { const newSkills = [...p.skills]; newSkills.splice(i, 1); return { ...p, skills: newSkills } });
 
   return (
-    <div className="cv-builder-root" style={{ display: 'flex', height: '100vh', background: colors.bg1, fontFamily: "'Inter', sans-serif", overflow: 'hidden' }}>
+    <div className="cv-builder-root" style={{ display: 'flex', height: '100vh', background: 'var(--bg-base)', fontFamily: "'Inter', sans-serif", overflow: 'hidden' }}>
 
       {/* FRONTEND ISOLATED EDITOR FULL WIDTH */}
       <div className="mobile-main-wrapper" style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
 
         {/* TOP HEADER */}
-        <div className="mobile-header-toolbar mobile-p-10" style={{ padding: '16px 32px', background: colors.bg2, borderBottom: `1px solid ${colors.border}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center', zIndex: 10, boxShadow: '0 2px 10px rgba(0,0,0,0.02)' }}>
+        <div className="mobile-header-toolbar mobile-p-10" style={{ padding: '16px 32px', background: 'var(--bg-surface-glass)', backdropFilter: 'blur(10px)', borderBottom: '1px solid var(--border-subtle)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', zIndex: 10 }}>
           <div className="mobile-full-width mobile-gap-10" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-            <button onClick={() => navigate('/dashboard')} style={{ background: 'transparent', border: 'none', color: '#3b82f6', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', padding: '0', fontSize: '14px', fontWeight: 'bold' }}>
+            <button onClick={() => navigate('/dashboard')} style={{ background: 'transparent', border: 'none', color: 'var(--accent-primary)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', padding: '0', fontSize: '14px', fontWeight: 'bold' }}>
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
               Voltar
             </button>
-            <div style={{ width: '1px', height: '24px', background: colors.border, margin: '0 4px' }}></div>
-            <h2 style={{ margin: 0, color: colors.text1, fontSize: '20px', fontWeight: '900', letterSpacing: '-0.5px' }}>CurrículoStudio</h2>
-            <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} style={{ background: 'transparent', border: `1px solid ${colors.border}`, color: colors.text1, padding: '8px 14px', borderRadius: '8px', cursor: 'pointer', fontSize: '13px', fontWeight: '600' }}>
-              {theme === 'dark' ? '☀️ Modo Claro' : '🌙 Modo Escuro'}
-            </button>
+            <div style={{ width: '1px', height: '24px', background: 'var(--border-strong)', margin: '0 4px' }}></div>
+            <h2 className="outfit gradient-text" style={{ margin: 0, fontSize: '20px', fontWeight: '900', letterSpacing: '-0.5px' }}>CurrículoStudio</h2>
           </div>
           <div className="mobile-wrap" style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
             <select value={lang} onChange={e => setLang(e.target.value)} style={{ ...inputStyle, width: 'auto', margin: 0, fontWeight: 'bold' }}>
@@ -323,16 +337,16 @@ ${aiText}
               <option value={12}>12. Minimalista Executivo</option>
               <option value={13}>13. Profissional Dinâmico</option>
             </select>
-            <button onClick={() => setShowAiModal(true)} style={{ background: 'transparent', border: `1px solid ${colors.border}`, color: colors.text1, padding: '10px 18px', borderRadius: '8px', cursor: 'pointer', fontWeight: '700', fontSize: '13px' }}>✦ Importar CV</button>
-            <button onClick={() => setShowPreview(true)} style={{ background: '#3b82f6', color: '#fff', border: 'none', padding: '10px 18px', borderRadius: '8px', cursor: 'pointer', fontWeight: '700', fontSize: '13px', boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)' }}>👁 Visualizar CV</button>
-            <button onClick={handlePdfDownload} style={{ background: colors.btnBg, color: colors.btnText, border: 'none', padding: '10px 18px', borderRadius: '8px', cursor: 'pointer', fontWeight: '700', fontSize: '13px', boxShadow: theme === 'light' ? '0 4px 12px rgba(0,0,0,0.1)' : 'none' }}>⬇ Baixar PDF</button>
+            <button className="btn-secondary" onClick={() => setShowAiModal(true)} style={{ padding: '10px 18px', fontSize: '13px' }}>✦ Importar</button>
+            <button className="btn-secondary" onClick={handleAiReview} style={{ padding: '10px 18px', fontSize: '13px', borderColor: 'var(--accent-primary)', color: 'var(--accent-primary)' }}>👁 Auto-Rever & Ver</button>
+            <button className="btn-primary" onClick={handlePdfDownload} style={{ padding: '10px 18px', fontSize: '13px' }}>⬇ Baixar PDF</button>
           </div>
         </div>
 
         {/* TABS MENU */}
-        <div className="mobile-tabs" style={{ display: 'flex', background: colors.bg2, borderBottom: `1px solid ${colors.border}`, padding: '0 24px', overflowX: 'auto' }}>
+        <div className="mobile-tabs" style={{ display: 'flex', background: 'var(--bg-surface)', borderBottom: '1px solid var(--border-subtle)', padding: '0 24px', overflowX: 'auto', gap: '8px' }}>
           {['pessoais', 'perfil', 'experiencia', 'formacao', 'cursos', 'competencias', 'idiomas'].map(tab => (
-            <button key={tab} onClick={() => setActiveTab(tab)} style={{ padding: '14px 20px', background: 'none', border: 'none', color: activeTab === tab ? colors.text1 : colors.text2, fontSize: '13px', fontWeight: activeTab === tab ? 600 : 400, cursor: 'pointer', borderBottom: activeTab === tab ? `2px solid ${colors.text1}` : '2px solid transparent', textTransform: 'capitalize', whiteSpace: 'nowrap' }}>
+            <button key={tab} onClick={() => setActiveTab(tab)} style={{ padding: '16px 20px', background: 'none', border: 'none', color: activeTab === tab ? 'var(--accent-primary)' : 'var(--text-secondary)', fontSize: '13px', fontWeight: activeTab === tab ? 700 : 500, cursor: 'pointer', borderBottom: activeTab === tab ? `3px solid var(--accent-primary)` : '3px solid transparent', textTransform: 'capitalize', whiteSpace: 'nowrap', transition: 'all 0.2s' }}>
               {tab === 'perfil' ? 'Perfil Pessoal' : tab}
             </button>
           ))}
@@ -340,7 +354,7 @@ ${aiText}
 
         {/* EDITOR AREA CENTRADO */}
         <div className="mobile-editor-container" style={{ flex: 1, overflowY: 'auto', padding: '40px 24px', display: 'flex', justifyContent: 'center', alignItems: 'flex-start' }}>
-          <div className="mobile-editor-card" style={{ width: '100%', maxWidth: '1000px', background: colors.bg2, border: `1px solid ${colors.border}`, borderRadius: '20px', padding: '40px 64px', boxShadow: theme === 'light' ? '0 20px 40px -10px rgba(0,0,0,0.06)' : '0 20px 40px -10px rgba(0,0,0,0.4)' }}>
+          <div className="glass-panel mobile-editor-card" style={{ width: '100%', maxWidth: '1000px', padding: '40px 64px' }}>
 
             {activeTab === 'pessoais' && (
               <div>
@@ -376,8 +390,8 @@ ${aiText}
                 </div>
 
                 {template === 8 && (
-                  <div className="mobile-p-20" style={{ border: `2px dashed ${colors.border}`, padding: '20px', borderRadius: '12px', marginTop: '16px', background: theme === 'light' ? '#f8fafc' : '#1e293b' }}>
-                    <h4 style={{ fontSize: '13px', color: colors.text2, marginBottom: '12px', fontWeight: '800' }}>Campos Exclusivos (Moçambique)</h4>
+                  <div className="mobile-p-20" style={{ border: '2px dashed var(--border-strong)', padding: '20px', borderRadius: '12px', marginTop: '16px', background: 'var(--bg-surface)' }}>
+                    <h4 style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '12px', fontWeight: '800' }}>Campos Exclusivos (Moçambique)</h4>
                     <div className="mobile-grid-1" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                       <div><label style={labelStyle}>Nacionalidade</label><input type="text" value={data.nacionalidade} onChange={e => setData({ ...data, nacionalidade: e.target.value })} style={inputStyle} /></div>
                       <div><label style={labelStyle}>Data Nascimento</label><input type="text" value={data.dataNascimento} onChange={e => setData({ ...data, dataNascimento: e.target.value })} style={inputStyle} /></div>
@@ -392,7 +406,7 @@ ${aiText}
             {activeTab === 'perfil' && (
               <div>
                 <label style={labelStyle}>Perfil Pessoal / Resumo Profissional</label>
-                <p style={{ fontSize: '12px', color: colors.text2, marginBottom: '12px' }}>Escreva um breve resumo sobre quem você é profissionalmente, os seus objetivos e o que o destaca.</p>
+                <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginBottom: '12px' }}>Escreva um breve resumo sobre quem você é profissionalmente, os seus objetivos e o que o destaca.</p>
                 <textarea value={data.summary} onChange={e => setData({ ...data, summary: e.target.value })} style={{ ...inputStyle, height: '180px', resize: 'vertical' }} placeholder="Sou um profissional focado em..." />
               </div>
             )}
@@ -445,12 +459,12 @@ ${aiText}
                 <label style={labelStyle}>Adicionar Competências (Pressione Enter ou use ,)</label>
                 <div style={{ display: 'flex', gap: '8px', marginBottom: '20px' }}>
                   <input type="text" value={skillInput} onChange={e => setSkillInput(e.target.value)} onKeyDown={e => { if (e.key === 'Enter' || e.key === ',') { e.preventDefault(); addSkill() } }} style={{ ...inputStyle, marginBottom: 0 }} placeholder="Redes, Gestão..." />
-                  <button onClick={addSkill} style={{ background: colors.border, color: colors.text1, border: 'none', borderRadius: '10px', padding: '0 20px', cursor: 'pointer', fontWeight: 'bold', fontSize: '18px' }}>+</button>
+                  <button onClick={addSkill} style={{ background: 'var(--border-strong)', color: 'var(--text-primary)', border: 'none', borderRadius: '10px', padding: '0 20px', cursor: 'pointer', fontWeight: 'bold', fontSize: '18px' }}>+</button>
                 </div>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
                   {data.skills.map((s, i) => (
-                    <div key={i} style={{ background: colors.border, color: colors.text1, padding: '8px 16px', borderRadius: '20px', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '10px', fontWeight: '500' }}>
-                      {s} <button onClick={() => removeSkill(i)} style={{ background: '#ef4444', border: 'none', color: '#fff', cursor: 'pointer', fontSize: '14px', width: '20px', height: '20px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>&times;</button>
+                    <div key={i} style={{ background: 'var(--bg-base)', border: '1px solid var(--border-subtle)', color: 'var(--text-primary)', padding: '8px 16px', borderRadius: '20px', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '10px', fontWeight: '500' }}>
+                      {s} <button onClick={() => removeSkill(i)} style={{ background: 'rgba(239, 68, 68, 0.1)', border: 'none', color: '#ef4444', cursor: 'pointer', fontSize: '14px', width: '20px', height: '20px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>&times;</button>
                     </div>
                   ))}
                 </div>
@@ -475,27 +489,78 @@ ${aiText}
         </div>
       </div>
 
-      {/* FULL SCREEN PREVIEW MODAL */}
+      {/* FULL SCREEN PREVIEW & AI REVIEW MODAL */}
       {showPreview && (
         <div className="mobile-preview-overlay" style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', display: 'flex', flexDirection: 'column', zIndex: 9999 }}>
-          <div className="mobile-header-toolbar mobile-p-10" style={{ padding: '16px 24px', background: colors.bg2, borderBottom: `1px solid ${colors.border}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexShrink: 0 }}>
-            <h3 style={{ color: colors.text1, margin: 0, fontSize: '16px' }}>👁 Modo de Visualização</h3>
+          <div className="mobile-header-toolbar mobile-p-10" style={{ padding: '16px 24px', background: 'var(--bg-surface)', borderBottom: `1px solid var(--border-subtle)`, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexShrink: 0 }}>
+            <h3 style={{ color: 'var(--text-primary)', margin: 0, fontSize: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ color: 'var(--accent-primary)' }}>✦</span> Auditoria de IA & Visualização
+            </h3>
             <div className="mobile-wrap" style={{ display: 'flex', gap: '12px' }}>
-              <button onClick={handlePdfDownload} style={{ background: colors.btnBg, color: colors.btnText, border: 'none', padding: '8px 16px', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold', fontSize: '13px' }}>⬇ Baixar PDF</button>
-              <button onClick={() => setShowPreview(false)} style={{ background: '#ef4444', color: '#fff', border: 'none', padding: '8px 16px', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold', fontSize: '13px' }}>✕ Fechar</button>
+              <button className="btn-primary" onClick={handlePdfDownload} style={{ padding: '8px 16px', borderRadius: '6px', fontSize: '13px' }}>⬇ Baixar PDF Final</button>
+              <button className="btn-secondary" onClick={() => setShowPreview(false)} style={{ padding: '8px 16px', borderRadius: '6px', fontSize: '13px' }}>✕ Fechar Tudo</button>
             </div>
           </div>
 
-          <button onClick={() => setShowPreview(false)} style={{ position: 'absolute', top: '80px', right: '30px', background: '#ef4444', color: '#fff', border: 'none', width: '44px', height: '44px', borderRadius: '50%', cursor: 'pointer', fontSize: '20px', fontWeight: 'bold', boxShadow: '0 4px 12px rgba(0,0,0,0.5)', zIndex: 10000, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>✕</button>
+          <div className="mobile-flex-col" style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
+            
+            {/* AI REVIEW PANEL (LEFT COL) */}
+            <div className="custom-scrollbar mobile-full-width" style={{ width: '400px', maxWidth: '100%', background: 'var(--bg-base)', borderRight: '1px solid var(--border-subtle)', overflowY: 'auto', padding: '32px' }}>
+              <div className="premium-card" style={{ padding: '24px', marginBottom: '24px' }}>
+                <h4 className="outfit" style={{ fontSize: '18px', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                  Auditoria de Especialista
+                </h4>
+                
+                {reviewLoading ? (
+                  <div style={{ padding: '20px 0', textAlign: 'center', color: 'var(--text-tertiary)' }}>
+                    <div style={{ marginBottom: '12px', animation: 'pulse 1.5s infinite' }}>A analisar minuciosamente o teu CV...</div>
+                  </div>
+                ) : reviewData ? (
+                  <div style={{ animation: 'fadeIn 0.3s ease' }}>
+                    <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '24px' }}>
+                      <span className="outfit gradient-text" style={{ fontSize: '48px', fontWeight: '900', lineHeight: 1 }}>{reviewData.score || '85'}</span>
+                      <span style={{ fontSize: '14px', color: 'var(--text-tertiary)', fontWeight: 'bold' }}>/ 100 PTS</span>
+                    </div>
 
-          <div style={{ flex: 1, overflowY: 'auto', padding: '40px', display: 'flex', justifyContent: 'center' }} onClick={(e) => { if (e.target === e.currentTarget) setShowPreview(false); }}>
-            <div style={{ width: 'max-content' }}>
-              <div
-                ref={pdfRef}
-                style={{ width: '794px', minHeight: '1123px', background: '#fff', boxShadow: '0 20px 40px rgba(0,0,0,0.3)' }}
-                dangerouslySetInnerHTML={{ __html: renderCV(template, data, lang) }}
-              />
+                    <div style={{ marginBottom: '24px' }}>
+                      <p style={{ fontSize: '13px', fontWeight: 'bold', textTransform: 'uppercase', color: '#10b981', marginBottom: '12px', letterSpacing: '0.5px' }}>✓ PONTOS FORTES</p>
+                      <ul style={{ paddingLeft: '20px', margin: 0, color: 'var(--text-secondary)', fontSize: '14px', lineHeight: '1.6' }}>
+                        {(reviewData.pontos_fortes || ['Design Limpo','O teu nome está bem destacado.']).map((pt, i) => (
+                          <li key={i} style={{ marginBottom: '8px' }}>{pt}</li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <div>
+                      <p style={{ fontSize: '13px', fontWeight: 'bold', textTransform: 'uppercase', color: '#f59e0b', marginBottom: '12px', letterSpacing: '0.5px' }}>⚠ SUGESTÕES DE MELHORIA</p>
+                      <ul style={{ paddingLeft: '20px', margin: 0, color: 'var(--text-secondary)', fontSize: '14px', lineHeight: '1.6' }}>
+                        {(reviewData.melhorias || ['Adiciona mais competências técnicas.']).map((pt, i) => (
+                          <li key={i} style={{ marginBottom: '8px' }}>{pt}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                ) : (
+                  <div style={{ padding: '20px 0', textAlign: 'center', color: 'var(--text-tertiary)', fontSize: '14px' }}>
+                    Modo offline. Análise rápida indisponível sem login/API no Backend.
+                  </div>
+                )}
+              </div>
+              <p style={{ fontSize: '12px', color: 'var(--text-tertiary)', textAlign: 'center' }}>Faz edições no modo normal, e depois volta aqui para veres o resultado!</p>
             </div>
+
+            {/* PREVIEW PANEL (RIGHT COL) */}
+            <div style={{ flex: 1, overflowY: 'auto', padding: '40px', display: 'flex', justifyContent: 'center', background: 'var(--bg-surface)' }} onClick={(e) => { if (e.target === e.currentTarget) setShowPreview(false); }}>
+              <div style={{ width: 'max-content' }}>
+                <div
+                  ref={pdfRef}
+                  style={{ width: '794px', minHeight: '1123px', background: '#fff', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.5)', transition: 'transform 0.3s ease' }}
+                  dangerouslySetInnerHTML={{ __html: renderCV(template, data, lang) }}
+                />
+              </div>
+            </div>
+
           </div>
         </div>
       )}
@@ -503,32 +568,32 @@ ${aiText}
       {/* OFFLINE / AI IMPORT MODAL */}
       {showAiModal && (
         <div className="mobile-import-overlay" style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10000 }}>
-          <div className="mobile-p-20" style={{ background: colors.bg2, padding: '24px', borderRadius: '12px', width: '90%', maxWidth: '600px', border: `1px solid ${colors.border}`, maxHeight: '90vh', overflowY: 'auto' }}>
-            <h3 style={{ color: colors.text1, margin: '0 0 12px 0' }}>Importação Rápida de Currículo</h3>
+          <div className="mobile-p-20" style={{ background: 'var(--bg-surface)', padding: '24px', borderRadius: '12px', width: '90%', maxWidth: '600px', border: `1px solid var(--border-subtle)`, maxHeight: '90vh', overflowY: 'auto' }}>
+            <h3 style={{ color: 'var(--text-primary)', margin: '0 0 12px 0' }}>Importação Rápida de Currículo</h3>
 
-            <div style={{ display: 'flex', gap: '8px', marginBottom: '16px', background: colors.border, padding: '4px', borderRadius: '8px' }}>
-              <button onClick={() => setUseAi(true)} style={{ flex: 1, padding: '8px', border: 'none', borderRadius: '6px', background: useAi ? colors.bg2 : 'transparent', color: useAi ? colors.text1 : colors.text2, fontWeight: useAi ? 'bold' : 'normal', cursor: 'pointer', boxShadow: useAi ? shadow : 'none', transition: 'all 0.2s' }}>✨ Agente IA (Recomendado)</button>
-              <button onClick={() => setUseAi(false)} style={{ flex: 1, padding: '8px', border: 'none', borderRadius: '6px', background: !useAi ? colors.bg2 : 'transparent', color: !useAi ? colors.text1 : colors.text2, fontWeight: !useAi ? 'bold' : 'normal', cursor: 'pointer', boxShadow: !useAi ? shadow : 'none', transition: 'all 0.2s' }}>⚡ Offline (Básico)</button>
+            <div style={{ display: 'flex', gap: '8px', marginBottom: '16px', background: 'var(--bg-base)', border: '1px solid var(--border-strong)', padding: '4px', borderRadius: '8px' }}>
+              <button onClick={() => setUseAi(true)} style={{ flex: 1, padding: '8px', border: 'none', borderRadius: '6px', background: useAi ? 'var(--bg-surface)' : 'transparent', color: useAi ? 'var(--text-primary)' : 'var(--text-secondary)', fontWeight: useAi ? 'bold' : 'normal', cursor: 'pointer', boxShadow: useAi ? 'var(--shadow-sm)' : 'none', transition: 'all 0.2s' }}>✨ Agente IA (Recomendado)</button>
+              <button onClick={() => setUseAi(false)} style={{ flex: 1, padding: '8px', border: 'none', borderRadius: '6px', background: !useAi ? 'var(--bg-surface)' : 'transparent', color: !useAi ? 'var(--text-primary)' : 'var(--text-secondary)', fontWeight: !useAi ? 'bold' : 'normal', cursor: 'pointer', boxShadow: !useAi ? 'var(--shadow-sm)' : 'none', transition: 'all 0.2s' }}>⚡ Offline (Básico)</button>
             </div>
 
             {useAi ? (
               <div style={{ marginBottom: '16px', animation: 'fadeIn 0.3s ease' }}>
-                <p style={{ color: colors.text2, fontSize: '13px', marginBottom: '12px', lineHeight: '1.5' }}>O Agente IA lê o texto desestruturado usando a sua inteligência, converte, e preenche impecavelmente <b>todos</b> os campos do formulário por si.<br />
+                <p style={{ color: 'var(--text-secondary)', fontSize: '13px', marginBottom: '12px', lineHeight: '1.5' }}>O Agente IA lê o texto desestruturado usando a sua inteligência, converte, e preenche impecavelmente <b>todos</b> os campos do formulário por si.<br />
                   Para usar esta magia gratuitamente necessita de uma <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noreferrer" style={{ color: '#3b82f6', textDecoration: 'none', fontWeight: 'bold' }}>Google Gemini API Key</a>.</p>
                 <input type="password" value={apiKey} onChange={e => { setApiKey(e.target.value); localStorage.setItem('gemini_api_key', e.target.value); }} placeholder="Cole a sua API Key do Gemini (sk-...)" style={{ ...inputStyle, marginBottom: '12px', borderColor: '#3b82f6' }} />
 
-                <label style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '13px', color: colors.text1, cursor: 'pointer', fontWeight: '500', background: colors.bg1, padding: '12px', borderRadius: '8px', border: `1px solid ${colors.border}` }}>
+                <label style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '13px', color: 'var(--text-primary)', cursor: 'pointer', fontWeight: '500', background: 'var(--bg-base)', padding: '12px', borderRadius: '8px', border: `1px solid var(--border-strong)` }}>
                   <input type="checkbox" checked={autoSummary} onChange={e => setAutoSummary(e.target.checked)} style={{ width: '18px', height: '18px', accentColor: '#3b82f6', marginTop: '2px' }} />
                   Gerar Perfil Pessoal/Resumo Profissional focado em vender o meu perfil caso o CV não tenha um forte estruturado.
                 </label>
               </div>
             ) : (
-              <p style={{ color: colors.text2, fontSize: '13px', marginBottom: '16px', lineHeight: '1.5', animation: 'fadeIn 0.3s ease' }}>O sistema offline tenta agrupar secções pelo texto bruto e procurar por Emails/Telefones via Regex. Vai exigir mais revisão manual após a extração.</p>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '13px', marginBottom: '16px', lineHeight: '1.5', animation: 'fadeIn 0.3s ease' }}>O sistema offline tenta agrupar secções pelo texto bruto e procurar por Emails/Telefones via Regex. Vai exigir mais revisão manual após a extração.</p>
             )}
 
             <div className="mobile-flex-col" style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
               <input type="file" id="cv-file-upload" accept=".pdf,.doc,.docx" style={{ display: 'none' }} onChange={handleFileImport} />
-              <button disabled={aiLoading} onClick={() => document.getElementById('cv-file-upload').click()} style={{ background: colors.btnBg, color: colors.btnText, border: 'none', padding: '10px 12px', borderRadius: '6px', cursor: 'pointer', fontSize: '13px', flex: 1, fontWeight: '700' }}>
+              <button className="btn-secondary" disabled={aiLoading} onClick={() => document.getElementById('cv-file-upload').click()} style={{ padding: '10px 12px', fontSize: '13px', flex: 1 }}>
                 📄 Selecionar Ficheiro (PDF / Word)
               </button>
             </div>
@@ -536,12 +601,12 @@ ${aiText}
             <textarea
               value={aiText} onChange={e => setAiText(e.target.value)}
               placeholder="Após escolher um CV, o texto em bruto vai aparecer aqui. Também pode colar texto ou anotações diretamente..."
-              style={{ width: '100%', height: '120px', background: colors.bg1, border: `1px solid ${colors.border}`, color: colors.text1, padding: '12px', borderRadius: '8px', outline: 'none', marginBottom: '16px', fontSize: '13px', resize: 'vertical' }}
+              style={{ width: '100%', height: '120px', background: 'var(--bg-base)', border: `1px solid var(--border-strong)`, color: 'var(--text-primary)', padding: '12px', borderRadius: '8px', outline: 'none', marginBottom: '16px', fontSize: '13px', resize: 'vertical' }}
             />
 
             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
-              <button onClick={() => setShowAiModal(false)} style={{ background: 'transparent', color: colors.text2, border: 'none', cursor: 'pointer', fontWeight: 'bold' }}>Cancelar</button>
-              <button onClick={useAi ? handleAiImport : handleLocalImport} disabled={aiLoading || (useAi && (!apiKey || !aiText)) || (!useAi && !aiText)} style={{ background: '#3b82f6', color: '#fff', border: 'none', padding: '10px 20px', borderRadius: '6px', fontWeight: 'bold', cursor: 'pointer', fontSize: '13px', opacity: (aiLoading || (useAi && (!apiKey || !aiText)) || (!useAi && !aiText)) ? 0.5 : 1, transition: 'all 0.2s', boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)' }}>
+              <button onClick={() => setShowAiModal(false)} style={{ background: 'transparent', color: 'var(--text-secondary)', border: 'none', cursor: 'pointer', fontWeight: 'bold' }}>Cancelar</button>
+              <button className="btn-primary" onClick={useAi ? handleAiImport : handleLocalImport} disabled={aiLoading || (useAi && (!apiKey || !aiText)) || (!useAi && !aiText)} style={{ padding: '10px 20px', fontSize: '13px', opacity: (aiLoading || (useAi && (!apiKey || !aiText)) || (!useAi && !aiText)) ? 0.5 : 1 }}>
                 {aiLoading ? 'Processando...' : (useAi ? '✨ Extrair com IA' : 'Extrair Offline')}
               </button>
             </div>
@@ -552,12 +617,12 @@ ${aiText}
       {/* CUSTOM ALERT MODAL */}
       {alertMsg && (
         <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 99999, animation: 'fadeIn 0.2s ease' }}>
-          <div style={{ background: theme === 'light' ? '#ffffff' : '#1e293b', padding: '32px 40px', borderRadius: '16px', maxWidth: '420px', width: '90%', textAlign: 'center', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', border: `1px solid ${colors.border}`, display: 'flex', flexDirection: 'column', alignItems: 'center', animation: 'slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1)' }}>
-            <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: theme === 'light' ? '#eff6ff' : '#0f172a', color: '#3b82f6', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
+          <div className="premium-card" style={{ padding: '32px 40px', maxWidth: '420px', width: '90%', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', animation: 'slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1)', zIndex: 100000 }}>
+            <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'var(--accent-glow)', color: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
             </div>
-            <p style={{ color: colors.text1, fontSize: '15px', lineHeight: '1.6', marginBottom: '28px', fontWeight: '500' }}>{alertMsg}</p>
-            <button onClick={() => setAlertMsg(null)} style={{ background: '#3b82f6', color: '#ffffff', border: 'none', padding: '12px 32px', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer', fontSize: '14px', width: '100%', transition: 'background 0.2s', boxShadow: '0 4px 12px rgba(59, 130, 246, 0.2)' }}>
+            <p style={{ color: 'var(--text-primary)', fontSize: '15px', lineHeight: '1.6', marginBottom: '28px', fontWeight: '500' }}>{alertMsg}</p>
+            <button className="btn-primary" onClick={() => setAlertMsg(null)} style={{ padding: '12px 32px', fontSize: '14px', width: '100%' }}>
               Entendido
             </button>
           </div>

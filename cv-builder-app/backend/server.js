@@ -5,7 +5,8 @@ const jwt = require('jsonwebtoken');
 const { OAuth2Client } = require('google-auth-library');
 const multer = require('multer');
 const path = require('path');
-
+const { buildCVPrompt, buildCartaPrompt, buildChatPrompt, buildReviewPrompt, buildProfilePrompt } = require('./prompt');
+const { chamarIA } = require('./api');
 require('dotenv').config();
 
 const app = express();
@@ -101,6 +102,26 @@ const authenticate = (req, res, next) => {
   }
 };
 
+// Configure Multer for file uploads (e.g. profile pictures)
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/');
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, uniqueSuffix + path.extname(file.originalname));
+  }
+});
+const upload = multer({ storage: storage });
+
+app.post('/api/upload', authenticate, upload.single('image'), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: 'Nenhum ficheiro enviado' });
+  }
+  const fileUrl = `${req.protocol}://${req.get('host')}/uploads/${req.file.filename}`;
+  res.json({ url: fileUrl });
+});
+
 // CV Routes
 app.get('/api/cvs', authenticate, (req, res) => {
   db.all('SELECT * FROM cvs WHERE user_id = ? ORDER BY updated_at DESC', [req.user.id], (err, rows) => {
@@ -129,7 +150,136 @@ app.put('/api/cvs/:id', authenticate, (req, res) => {
   );
 });
 
-// Removed AI routes as per user request to be API-free
+app.get('/api/cvs/:id', authenticate, (req, res) => {
+  db.get('SELECT * FROM cvs WHERE id = ? AND user_id = ?', [req.params.id, req.user.id], (err, row) => {
+    if (err) return res.status(500).json({ error: err.message });
+    if (!row) return res.status(404).json({ error: 'CV not found' });
+    res.json({ ...row, data: JSON.parse(row.data) });
+  });
+});
+
+app.delete('/api/cvs/:id', authenticate, (req, res) => {
+  db.run('DELETE FROM cvs WHERE id = ? AND user_id = ?', [req.params.id, req.user.id], function(err) {
+    if (err) return res.status(500).json({ error: err.message });
+    if (this.changes === 0) return res.status(404).json({ error: 'CV not found' });
+    res.json({ success: true });
+  });
+});
+
+// Cover Letter Routes
+app.get('/api/cover-letters', authenticate, (req, res) => {
+  db.all('SELECT * FROM cover_letters WHERE user_id = ? ORDER BY created_at DESC', [req.user.id], (err, rows) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(rows.map(row => {
+      try { return { ...row, content: JSON.parse(row.content) }; } 
+      catch { return row; }
+    }));
+  });
+});
+
+app.get('/api/cover-letters/:id', authenticate, (req, res) => {
+  db.get('SELECT * FROM cover_letters WHERE id = ? AND user_id = ?', [req.params.id, req.user.id], (err, row) => {
+    if (err) return res.status(500).json({ error: err.message });
+    if (!row) return res.status(404).json({ error: 'Cover letter not found' });
+    try {
+      res.json({ ...row, content: JSON.parse(row.content) });
+    } catch {
+      res.json(row);
+    }
+  });
+});
+
+app.post('/api/cover-letters', authenticate, (req, res) => {
+  const { title, content } = req.body;
+  const contentStr = typeof content === 'string' ? content : JSON.stringify(content);
+  db.run('INSERT INTO cover_letters (user_id, title, content) VALUES (?, ?, ?)', [req.user.id, title, contentStr], function(err) {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json({ id: this.lastID, title, content });
+  });
+});
+
+app.put('/api/cover-letters/:id', authenticate, (req, res) => {
+  const { title, content } = req.body;
+  const contentStr = typeof content === 'string' ? content : JSON.stringify(content);
+  db.run('UPDATE cover_letters SET title = ?, content = ? WHERE id = ? AND user_id = ?', 
+    [title, contentStr, req.params.id, req.user.id], 
+    function(err) {
+      if (err) return res.status(500).json({ error: err.message });
+      if (this.changes === 0) return res.status(404).json({ error: 'Cover letter not found' });
+      res.json({ success: true });
+    }
+  );
+});
+
+app.delete('/api/cover-letters/:id', authenticate, (req, res) => {
+  db.run('DELETE FROM cover_letters WHERE id = ? AND user_id = ?', [req.params.id, req.user.id], function(err) {
+    if (err) return res.status(500).json({ error: err.message });
+    if (this.changes === 0) return res.status(404).json({ error: 'Cover letter not found' });
+    res.json({ success: true });
+  });
+});
+
+// AI Routes (Integração com Anthropic)
+app.post('/api/ai/chat', authenticate, async (req, res) => {
+  try {
+    const { historicoConversa } = req.body;
+    if (!historicoConversa || !Array.isArray(historicoConversa)) {
+      return res.status(400).json({ error: 'historicoConversa é obrigatório e deve ser um array.' });
+    }
+    const prompt = buildChatPrompt(historicoConversa);
+    const response = await chamarIA(prompt);
+    res.json(response);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/ai/profile', authenticate, async (req, res) => {
+  try {
+    const { dados } = req.body;
+    const prompt = buildProfilePrompt(dados);
+    const response = await chamarIA(prompt);
+    res.json(response);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/ai/generate-cv', authenticate, async (req, res) => {
+  try {
+    const { dados, vaga } = req.body;
+    const prompt = buildCVPrompt(dados, vaga);
+    const cvJson = await chamarIA(prompt);
+    res.json(cvJson);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/ai/generate-cover-letter', authenticate, async (req, res) => {
+  try {
+    const { dados, vaga, empresa } = req.body;
+    const prompt = buildCartaPrompt(dados, vaga, empresa);
+    const result = await chamarIA(prompt);
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/ai/review', authenticate, async (req, res) => {
+  try {
+    const { cvGerado } = req.body;
+    // Se o frontend enviar formato objeto, passamos para string
+    const stringData = typeof cvGerado === 'string' ? cvGerado : JSON.stringify(cvGerado, null, 2);
+    const prompt = buildReviewPrompt(stringData);
+    const reviewResult = await chamarIA(prompt);
+    res.json(reviewResult);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Backend server running on http://localhost:${PORT}`);
 });

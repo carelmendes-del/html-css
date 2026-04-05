@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { GoogleLogin } from '@react-oauth/google';
+import { Mail, Lock, User, Eye, EyeOff, Sparkles } from 'lucide-react';
 import axios from 'axios';
 
 const Login = () => {
@@ -29,7 +30,6 @@ const Login = () => {
     try {
       const endpoint = isRegister ? '/api/auth/register' : '/api/auth/login';
       // MOCK: in a full implementation, add register/login local routes
-      // Fallback to local storage mock for demonstration if backend fails quickly
       sessionStorage.setItem('token', 'local-jwt-token');
       sessionStorage.setItem('user', JSON.stringify({ email, name: name || 'Utilizador' }));
       navigate('/');
@@ -38,60 +38,101 @@ const Login = () => {
     }
   };
 
+  const inputContainerStyle = {
+    position: 'relative',
+    display: 'flex',
+    alignItems: 'center',
+    background: 'var(--bg-base)',
+    border: '1px solid var(--border-strong)',
+    borderRadius: '12px',
+    overflow: 'hidden',
+    transition: 'all 0.3s ease'
+  };
+
+  const iconStyle = {
+    color: 'var(--text-tertiary)',
+    padding: '0 14px',
+    display: 'flex',
+    alignItems: 'center'
+  };
+
+  const inputStyle = {
+    width: '100%',
+    padding: '16px 16px 16px 0',
+    background: 'transparent',
+    border: 'none',
+    color: 'var(--text-primary)',
+    fontSize: '15px',
+    outline: 'none',
+    fontFamily: 'var(--font-body)'
+  };
+
   return (
-    <div className="mobile-p-10" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#09090b', color: '#fafafa', fontFamily: 'sans-serif' }}>
-      <div className="mobile-p-20" style={{ background: '#18181b', padding: '40px', borderRadius: '12px', width: '100%', maxWidth: '400px', border: '1px solid #3f3f46' }}>
-        <h1 style={{ fontSize: '28px', marginBottom: '8px', textAlign: 'center' }}>CurrículoStudio</h1>
-        <p style={{ fontSize: '14px', color: '#a1a1aa', textAlign: 'center', marginBottom: '24px' }}>
-          {isRegister ? 'Crie a sua conta na plataforma' : 'Faça login para gerir os seus CVs'}
-        </p>
+    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
+      
+      {/* Background Decor */}
+      <div style={{ position: 'absolute', top: '-10%', left: '-10%', width: '500px', height: '500px', background: 'var(--accent-glow)', filter: 'blur(100px)', borderRadius: '50%', zIndex: 0, opacity: 0.5 }}></div>
+      <div style={{ position: 'absolute', bottom: '-10%', right: '-10%', width: '600px', height: '600px', background: 'rgba(192, 132, 252, 0.15)', filter: 'blur(120px)', borderRadius: '50%', zIndex: 0, opacity: 0.5 }}></div>
 
-        {error && <p style={{ color: '#ef4444', fontSize: '13px', marginBottom: '12px', textAlign: 'center' }}>{error}</p>}
+      <div className="glass-panel" style={{ padding: '48px', width: '100%', maxWidth: '440px', position: 'relative', zIndex: 1, display: 'flex', flexDirection: 'column' }}>
+        
+        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '64px', height: '64px', borderRadius: '20px', background: 'var(--accent-glow)', color: 'var(--accent-primary)', marginBottom: '20px' }}>
+            <Sparkles size={32} />
+          </div>
+          <h1 className="outfit gradient-text" style={{ fontSize: '32px', marginBottom: '8px' }}>CurrículoStudio</h1>
+          <p style={{ fontSize: '15px', color: 'var(--text-secondary)' }}>
+            {isRegister ? 'Cria o teu perfil para começar' : 'Faça login para continuar o teu progresso'}
+          </p>
+        </div>
 
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          {isRegister && (
-            <input type="text" placeholder="Nome Completo" required value={name} onChange={e => setName(e.target.value)} 
-              style={{ width: '100%', padding: '12px', borderRadius: '6px', background: '#09090b', border: '1px solid #3f3f46', color: '#fff', outline: 'none' }} />
-          )}
-          <input type="email" placeholder="E-mail" required value={email} onChange={e => setEmail(e.target.value)} 
-            style={{ width: '100%', padding: '12px', borderRadius: '6px', background: '#09090b', border: '1px solid #3f3f46', color: '#fff', outline: 'none' }} />
+        {error && <div style={{ background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', border: '1px solid rgba(239, 68, 68, 0.2)', padding: '12px', borderRadius: '10px', fontSize: '14px', marginBottom: '20px', textAlign: 'center' }}>{error}</div>}
+
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           
-          <div style={{ position: 'relative' }}>
-            <input type={showPassword ? "text" : "password"} placeholder="Senha" required value={password} onChange={e => setPassword(e.target.value)} 
-              style={{ width: '100%', padding: '12px', paddingRight: '44px', borderRadius: '6px', background: '#09090b', border: '1px solid #3f3f46', color: '#fff', outline: 'none' }} />
+          {isRegister && (
+            <div style={inputContainerStyle}>
+              <div style={iconStyle}><User size={20} /></div>
+              <input type="text" placeholder="Nome Completo" required value={name} onChange={e => setName(e.target.value)} style={inputStyle} />
+            </div>
+          )}
+          
+          <div style={inputContainerStyle}>
+            <div style={iconStyle}><Mail size={20} /></div>
+            <input type="email" placeholder="Endereço de E-mail" required value={email} onChange={e => setEmail(e.target.value)} style={inputStyle} />
+          </div>
+          
+          <div style={inputContainerStyle}>
+            <div style={iconStyle}><Lock size={20} /></div>
+            <input type={showPassword ? "text" : "password"} placeholder="Palavra-passe" required value={password} onChange={e => setPassword(e.target.value)} style={inputStyle} />
             <button 
               type="button" 
               onClick={() => setShowPassword(!showPassword)}
-              style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: '#a1a1aa', cursor: 'pointer', padding: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-              title={showPassword ? "Ocultar senha" : "Ver senha"}
+              style={{ background: 'none', border: 'none', color: 'var(--text-tertiary)', cursor: 'pointer', padding: '0 16px', display: 'flex', alignItems: 'center' }}
             >
-              {showPassword ? (
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
-              ) : (
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-              )}
+              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
             </button>
           </div>
           
-          <button type="submit" style={{ background: '#fafafa', color: '#09090b', border: 'none', padding: '12px', borderRadius: '6px', fontWeight: 'bold', cursor: 'pointer', marginTop: '8px' }}>
-            {isRegister ? 'Registar' : 'Entrar'}
+          <button type="submit" className="btn-primary" style={{ marginTop: '8px', fontSize: '16px', padding: '16px' }}>
+            {isRegister ? 'Registar Conta' : 'Entrar no Estúdio'}
           </button>
         </form>
 
-        <div style={{ display: 'flex', alignItems: 'center', margin: '24px 0' }}>
-          <div style={{ flex: 1, height: '1px', background: '#3f3f46' }}></div>
-          <span style={{ padding: '0 12px', fontSize: '12px', color: '#71717a' }}>ou</span>
-          <div style={{ flex: 1, height: '1px', background: '#3f3f46' }}></div>
+        <div style={{ display: 'flex', alignItems: 'center', margin: '32px 0' }}>
+          <div style={{ flex: 1, height: '1px', background: 'var(--border-strong)' }}></div>
+          <span style={{ padding: '0 16px', fontSize: '13px', color: 'var(--text-tertiary)', fontWeight: '600', textTransform: 'uppercase' }}>OU ENTRAR COM</span>
+          <div style={{ flex: 1, height: '1px', background: 'var(--border-strong)' }}></div>
         </div>
 
-        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '24px' }}>
-          <GoogleLogin onSuccess={handleGoogleSuccess} onError={() => setError('Google Login Failed')} theme="filled_black" shape="rectangular" />
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '32px' }}>
+          <GoogleLogin onSuccess={handleGoogleSuccess} onError={() => setError('Falha no Login da Google')} theme="outline" size="large" shape="circular" width="100%" />
         </div>
 
-        <p style={{ fontSize: '13px', color: '#a1a1aa', textAlign: 'center' }}>
-          {isRegister ? 'Já tem uma conta?' : 'Não tem conta?'}
-          <button onClick={() => setIsRegister(!isRegister)} style={{ background: 'none', border: 'none', color: '#fafafa', marginLeft: '6px', cursor: 'pointer', textDecoration: 'underline' }}>
-            {isRegister ? 'Faça Login' : 'Registe-se'}
+        <p style={{ fontSize: '14px', color: 'var(--text-secondary)', textAlign: 'center', margin: 0 }}>
+          {isRegister ? 'Já estás connosco?' : 'É a tua primeira vez?'}
+          <button onClick={() => setIsRegister(!isRegister)} style={{ background: 'none', border: 'none', color: 'var(--accent-primary)', marginLeft: '8px', cursor: 'pointer', fontWeight: 'bold', fontSize: '14px' }}>
+            {isRegister ? 'Faz Login' : 'Cria Conta Livre'}
           </button>
         </p>
       </div>
