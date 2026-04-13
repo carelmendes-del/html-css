@@ -1,0 +1,19 @@
+# Dependencies
+node_modules/
+
+# Database
+*.db
+*.db-journal
+
+# Environment
+.env
+.env.local
+
+# Logs
+logs
+*.log
+
+# Misc
+.DS_Store
+.vscode/
+.idea/

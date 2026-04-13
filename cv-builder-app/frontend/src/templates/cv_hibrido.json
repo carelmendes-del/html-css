@@ -1,0 +1,47 @@
+{
+    "id": "model_i",
+    "name": "Corporate Mint",
+    "layout": {
+        "type": "topbar-sidebar",
+        "sidebarPosition": "left",
+        "sidebarWidth": "30%"
+    },
+    "theme": {
+        "colors": {
+            "primary": "#14b8a6",
+            "topbarBg": "#14b8a6",
+            "topbarText": "#ffffff",
+            "textMain": "#334155",
+            "sidebarBg": "#334155",
+            "sidebarText": "#cbd5e1",
+            "sidebarTitle": "#14b8a6",
+            "photoBorder": "#ffffff"
+        },
+        "font": "'Inter', 'Roboto', sans-serif"
+    },
+    "variants": {
+        "headings": "bold-line",
+        "experience": "classic",
+        "education": "classic",
+        "skills": "bar",
+        "languages": "dots",
+        "photo": "circular"
+    },
+    "structure": {
+        "topbar": [
+            "photo",
+            "header",
+            "contact"
+        ],
+        "sidebar": [
+            "skills",
+            "languages"
+        ],
+        "main": [
+            "summary",
+            "experience",
+            "education",
+            "courses"
+        ]
+    }
+}

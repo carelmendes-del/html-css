@@ -88,6 +88,34 @@ app.post('/api/auth/google', async (req, res) => {
   }
 });
 
+// Local register route
+app.post('/api/auth/register', (req, res) => {
+  const { email, name, password } = req.body;
+  if (!email || !password) return res.status(400).json({ error: 'Email e senha são obrigatórios.' });
+  db.get('SELECT * FROM users WHERE email = ?', [email], (err, user) => {
+    if (err) return res.status(500).json({ error: err.message });
+    if (user) return res.status(400).json({ error: 'Email já registado.' });
+    db.run('INSERT INTO users (email, name, password) VALUES (?, ?, ?)', [email, name || 'Utilizador', password], function(err) {
+      if (err) return res.status(500).json({ error: err.message });
+      const newUser = { id: this.lastID, email, name: name || 'Utilizador' };
+      const jwtToken = jwt.sign({ id: newUser.id, email }, SECRET_KEY, { expiresIn: '7d' });
+      res.json({ token: jwtToken, user: newUser });
+    });
+  });
+});
+
+// Local login route
+app.post('/api/auth/login', (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) return res.status(400).json({ error: 'Email e senha são obrigatórios.' });
+  db.get('SELECT * FROM users WHERE email = ?', [email], (err, user) => {
+    if (err) return res.status(500).json({ error: err.message });
+    if (!user || user.password !== password) return res.status(401).json({ error: 'Credenciais inválidas.' });
+    const jwtToken = jwt.sign({ id: user.id, email: user.email }, SECRET_KEY, { expiresIn: '7d' });
+    res.json({ token: jwtToken, user: { id: user.id, email: user.email, name: user.name, picture: user.picture } });
+  });
+});
+
 // Setup auth middleware
 const authenticate = (req, res, next) => {
   const authHeader = req.headers.authorization;

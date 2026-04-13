@@ -1,0 +1,89 @@
+
+/* TIMELINE & COLORS SPREAD OVERRIDES (Templates 5, 7, 9, 10, 11, 12, 13) */
+
+/* T5 overrides (Emerald/Mint) */
+#cv-output.t5 .cv-name .t5-first { color: #ffffff; font-weight: 800; }
+#cv-output.t5 .cv-name .t5-last { color: #34d399; font-weight: 900; }
+#cv-output.t5 .t5-track { padding-left: 16px; border-left: 2px dashed #a7f3d0; margin-left: 10px; position: relative; }
+#cv-output.t5 .t5-timeline-item { position: relative; margin-bottom: 16px; }
+#cv-output.t5 .t5-dot { position: absolute; left: -22.5px; top: 4px; width: 11px; height: 11px; border-radius: 50%; background: #059669; box-shadow: 0 0 0 3px #fff; }
+#cv-output.t5 .t5-dot-c { position: absolute; left: -22.5px; top: 4px; width: 9px; height: 9px; border-radius: 50%; background: #34d399; box-shadow: 0 0 0 3px #fff; }
+#cv-output.t5 .cv-sec-icon { display: inline-block; width: 14px; height: 14px; background: #059669; border-radius: 3px; margin-right: 12px; }
+
+/* T7 overrides (Navy/Cyan) */
+#cv-output.t7 .t7-first { font-weight: 400; color: #fff; }
+#cv-output.t7 .t7-last { font-weight: 900; color: #0ea5e9; }
+#cv-output.t7 .t7-mfirst { font-weight: 300; color: #fff; }
+#cv-output.t7 .t7-mlast { font-weight: 900; color: #38bdf8; }
+#cv-output.t7 .t7-skill-bx { margin-bottom: 10px; }
+#cv-output.t7 .t7-skill-name { font-size: 10px; color: #bae6fd; font-weight: 700; margin-bottom: 4px; display: block; }
+#cv-output.t7 .t7-skill-bar { width: 100%; height: 4px; background: #334155; border-radius: 2px; overflow: hidden; }
+#cv-output.t7 .t7-skill-fill { width: 80%; height: 100%; background: #0ea5e9; border-radius: 2px; }
+#cv-output.t7 .t7-eduwrap { position: relative; border-left: 2px solid #e2e8f0; padding-left: 18px; margin-left: 6px; }
+#cv-output.t7 .t7-edudot { position: absolute !important; left: -7px; top: 0; width: 12px; height: 12px; background: #0ea5e9; border-radius: 50%; border: 3px solid #fff; margin-top: 0; }
+
+/* T9 overrides (Slate/Sunset Orange) */
+#cv-output.t9 .t9-first { font-weight: 400; color: #0f172a; }
+#cv-output.t9 .t9-last { font-weight: 900; color: #f97316; }
+#cv-output.t9 .t9-sec-icon { display: inline-block; width: 12px; height: 12px; background: #f97316; margin-right: 12px; clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); }
+#cv-output.t9 .t9-track { position: relative; border-left: 2px solid #e2e8f0; padding-left: 24px; margin-left: 120px; }
+#cv-output.t9 .t9-item-wrap { display: flex; flex-direction: column; position: relative; margin-bottom: 24px; gap: 0; }
+#cv-output.t9 .t9-item-date { position: absolute; left: -140px; top: 0; width: 100px; text-align: right; font-size: 11px; color: #f97316; font-weight: 900; }
+#cv-output.t9 .t9-dot { position: absolute; left: -29px; top: 2px; width: 10px; height: 10px; border-radius: 50%; background: #f97316; border: 2px solid #fff; }
+#cv-output.t9 .t9-skill-bx { margin-bottom: 12px; }
+#cv-output.t9 .t9-skill-name { font-size: 10px; color: #fdba74; font-weight: 700; margin-bottom: 4px; }
+#cv-output.t9 .t9-skill-bar { width: 100%; height: 3px; background: #334155; border-radius: 2px; }
+#cv-output.t9 .t9-skill-fill { width: 75%; height: 100%; background: #f97316; border-radius: 2px; }
+
+/* T10 overrides (Indigo/Violet) */
+#cv-output.t10 .t10-first { font-weight: 300; color: #fff; }
+#cv-output.t10 .t10-last { font-weight: 900; color: #8b5cf6; }
+#cv-output.t10 .t10-sec-icon { display: inline-block; width: 6px; height: 18px; background: #8b5cf6; margin-right: 12px; border-radius: 2px; }
+#cv-output.t10 .t10-track { position: relative; border-left: 2px dashed #e5e7eb; padding-left: 20px; margin-left: 6px; }
+#cv-output.t10 .t10-card { position: relative; margin-bottom: 28px; }
+#cv-output.t10 .t10-dot { position: absolute; left: -25px; top: 5px; width: 8px; height: 8px; border-radius: 50%; background: #1e1b4b; border: 2px solid #8b5cf6; }
+#cv-output.t10 .t10-skill-bx { margin-bottom: 10px; flex: 1 1 100%; }
+#cv-output.t10 .t10-skill-name { font-size: 10px; color: #1e1b4b; font-weight: 800; margin-bottom: 4px; text-transform: uppercase; }
+#cv-output.t10 .t10-skill-bar { width: 100%; height: 4px; background: #e5e7eb; border-radius: 2px; }
+#cv-output.t10 .t10-skill-fill { width: 85%; height: 100%; background: #8b5cf6; border-radius: 2px; }
+
+/* T11 overrides (Innovative Gray + Color Accents) */
+#cv-output.t11 .t11-first { font-weight: 300; color: #e2e8f0; }
+#cv-output.t11 .t11-last { font-weight: 900; color: #ffffff; }
+#cv-output.t11 .t11-sec-icon { display: inline-block; width: 8px; height: 8px; background: #60a5fa; margin-right: 10px; border-radius: 50%; }
+#cv-output.t11 .t11-track { position: relative; border-left: 1px solid #e2e8f0; padding-left: 22px; margin-left: 6px; }
+#cv-output.t11 .t11-item { position: relative; margin-bottom: 20px; }
+#cv-output.t11 .t11-dot { position: absolute; left: -29.5px; top: 6px; width: 8px; height: 8px; background: #60a5fa; border-radius: 50%; box-shadow: 0 0 0 2px #fff; }
+#cv-output.t11 .t11-skill-bx { margin-bottom: 10px; }
+#cv-output.t11 .t11-skill-name { font-size: 10px; color: #cbd5e1; font-weight: 600; margin-bottom: 4px; }
+#cv-output.t11 .t11-skill-bar { width: 100%; height: 3px; background: #2d3748; border-radius: 2px; overflow: hidden; }
+#cv-output.t11 .t11-skill-accent-1 .t11-skill-fill { width: 80%; height: 100%; background: #60a5fa; border-radius: 2px; }
+#cv-output.t11 .t11-skill-accent-2 .t11-skill-fill { width: 75%; height: 100%; background: #a78bfa; border-radius: 2px; }
+#cv-output.t11 .t11-skill-accent-3 .t11-skill-fill { width: 85%; height: 100%; background: #34d399; border-radius: 2px; }
+#cv-output.t11 .t11-skill-accent-4 .t11-skill-fill { width: 70%; height: 100%; background: #fb923c; border-radius: 2px; }
+#cv-output.t11 .t11-skill-accent-1 .t11-skill-name { color: #93c5fd; }
+#cv-output.t11 .t11-skill-accent-2 .t11-skill-name { color: #c4b5fd; }
+#cv-output.t11 .t11-skill-accent-3 .t11-skill-name { color: #6ee7b7; }
+#cv-output.t11 .t11-skill-accent-4 .t11-skill-name { color: #fdba74; }
+
+/* T12 overrides (Dark Executive / English) */
+#cv-output.t12 .t12-first { font-weight: 300; color: #e2e8f0; }
+#cv-output.t12 .t12-last { font-weight: 900; color: #ffffff; }
+#cv-output.t12 .t12-dot { position: absolute; left: -25px; top: 4px; width: 8px; height: 8px; background: #e11d48; border-radius: 50%; box-shadow: 0 0 0 2px #fff; }
+#cv-output.t12 .t12-skill-bx { margin-bottom: 10px; }
+#cv-output.t12 .t12-skill-name { font-size: 10px; color: #374151; font-weight: 700; margin-bottom: 4px; }
+#cv-output.t12 .t12-skill-bar { width: 100%; height: 3px; background: #f3f4f6; border-radius: 2px; }
+#cv-output.t12 .t12-skill-fill { width: 80%; height: 100%; background: #e11d48; border-radius: 2px; }
+#cv-output.t12 .t12-skills-col { margin-top: 6px; }
+
+/* T13 overrides (Royal Blue/Cyan - English) */
+#cv-output.t13 .t13-first { font-weight: 300; color: #0f172a; }
+#cv-output.t13 .t13-last { font-weight: 900; color: #0f172a; }
+#cv-output.t13 .t13-sec-icon { display: inline-block; width: 8px; height: 8px; background: #06b6d4; margin-right: 10px; border-radius: 50%; vertical-align: middle; }
+#cv-output.t13 .t13-track { position: relative; border-left: 1px solid #e2e8f0; padding-left: 22px; margin-left: 4px; }
+#cv-output.t13 .t13-item { position: relative; display: block; margin-bottom: 20px; }
+#cv-output.t13 .t13-dot { position: absolute; left: -26px; top: 6px; width: 8px; height: 8px; background: #1d4ed8; border-radius: 50%; box-shadow: 0 0 0 2px #fff; }
+#cv-output.t13 .t13-skill-bx { margin-bottom: 10px; }
+#cv-output.t13 .t13-skill-name { font-size: 10px; color: #1d4ed8; font-weight: 800; margin-bottom: 4px; }
+#cv-output.t13 .t13-skill-bar { width: 100%; height: 3px; background: #f1f5f9; border-radius: 2px; }
+#cv-output.t13 .t13-skill-fill { width: 75%; height: 100%; background: #06b6d4; border-radius: 2px; }

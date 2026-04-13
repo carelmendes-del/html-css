@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { renderCV } from '../components/CVRenderer';
 import '../components/CVRenderer.css';
-import html2pdf from 'html2pdf.js';
+import { useReactToPrint } from 'react-to-print';
 import axios from 'axios';
 
 const CVBuilder = () => {
@@ -12,11 +12,13 @@ const CVBuilder = () => {
     if (saved) {
       try {
         return JSON.parse(saved);
-      } catch (e) {}
+      } catch {
+        /* ignore */
+      }
     }
     return {
       name: '', title: '', email: '', phone: '', location: '', linkedin: '',
-      nacionalidade: '', dataNascimento: '', estadoCivil: '', bi: '', photo: null,
+      dataNascimento: '', nacionalidade: '', estadoCivil: '', bi: '', photo: null,
       summary: '',
       experiences: [], educations: [], courses: [], languages: [], skills: []
     };
@@ -32,12 +34,14 @@ const CVBuilder = () => {
   const [useAi, setUseAi] = useState(true);
   const [autoSummary, setAutoSummary] = useState(true);
   const [skillInput, setSkillInput] = useState('');
-  const [theme, setTheme] = useState(() => localStorage.getItem('cv_theme') || 'dark');
+  const [theme] = useState(() => localStorage.getItem('cv_theme') || 'dark');
   const [showPreview, setShowPreview] = useState(false);
   const [reviewData, setReviewData] = useState(null);
   const [reviewLoading, setReviewLoading] = useState(false);
+  const [pdfLoading, setPdfLoading] = useState(false);
   const [alertMsg, setAlertMsg] = useState(null);
   const pdfRef = useRef(null);
+  const printRef = useRef(null);
 
   useEffect(() => {
     localStorage.setItem('cv_data', JSON.stringify(data));
@@ -53,9 +57,38 @@ const CVBuilder = () => {
   const removeBtnStyle = { position: 'absolute', top: '12px', right: '12px', background: 'rgba(239, 68, 68, 0.1)', border: 'none', color: '#ef4444', cursor: 'pointer', fontSize: '16px', width: '28px', height: '28px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all 0.2s' };
   const addBtnStyle = { width: '100%', padding: '14px', border: '2px dashed var(--border-strong)', background: 'transparent', color: 'var(--text-secondary)', borderRadius: '12px', cursor: 'pointer', fontWeight: 'bold', transition: 'all 0.2s' };
 
+  const triggerPrint = useReactToPrint({
+    contentRef: printRef,
+    documentTitle: (data.name || 'Curriculo')
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-zA-Z0-9 ]/g, '').trim() + ' — Currículo',
+    pageStyle: `
+      @page { margin: 0; size: A4 portrait; }
+      *, *::before, *::after {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        box-sizing: border-box;
+      }
+      html, body {
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #ffffff !important;
+      }
+      #cv-output {
+        width: 794px !important;
+        max-width: 794px !important;
+        min-height: 1123px;
+        background: #ffffff !important;
+        margin: 0 auto !important;
+      }
+    `,
+    onAfterPrint: () => setPdfLoading(false),
+  });
+
   const handlePdfDownload = () => {
-    setAlertMsg('Dica: Na janela de impressão, escolha "Guardar como PDF" ou "Save as PDF" como destino.\nIsso garante um documento com texto selecionável e máxima qualidade.');
-    window.print();
+    if (pdfLoading) return;
+    setPdfLoading(true);
+    triggerPrint();
   };
 
   const handlePhotoUpload = (e) => {
@@ -72,14 +105,13 @@ const CVBuilder = () => {
     if (!reviewData) {
       setReviewLoading(true);
       try {
-        const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-        const res = await axios.post(`${BASE_URL}/api/ai/review`, { cvGerado: data }, {
+        const res = await axios.post('/api/ai/review', { cvGerado: data }, {
           headers: { Authorization: `Bearer ${sessionStorage.getItem('token')}` }
         });
         setReviewData(res.data);
       } catch (err) {
         console.error(err);
-        setAlertMsg('Falha ao obter conselhos de IA. Verifique se o backend está ligado.');
+        setAlertMsg('A funcionalidade avançada de IA necessita de uma ligação ativa ao servidor web.');
       } finally {
         setReviewLoading(false);
       }
@@ -147,7 +179,7 @@ const CVBuilder = () => {
       setData(prev => ({ ...prev, ...extracted }));
       setShowAiModal(false);
       setAlertMsg('Importação Offline concluída! \nComo este modo não usa Inteligência Artificial, a organização final depende de revisão manual.');
-    } catch (err) {
+    } catch {
       setAlertMsg("Erro ao processar o texto localmente.");
     } finally {
       setAiLoading(false);
@@ -339,7 +371,7 @@ ${aiText}
             </select>
             <button className="btn-secondary" onClick={() => setShowAiModal(true)} style={{ padding: '10px 18px', fontSize: '13px' }}>✦ Importar</button>
             <button className="btn-secondary" onClick={handleAiReview} style={{ padding: '10px 18px', fontSize: '13px', borderColor: 'var(--accent-primary)', color: 'var(--accent-primary)' }}>👁 Auto-Rever & Ver</button>
-            <button className="btn-primary" onClick={handlePdfDownload} style={{ padding: '10px 18px', fontSize: '13px' }}>⬇ Baixar PDF</button>
+            <button className="btn-primary" onClick={handlePdfDownload} disabled={pdfLoading} style={{ padding: '10px 18px', fontSize: '13px', opacity: pdfLoading ? 0.7 : 1 }}>{pdfLoading ? '⏳ A gerar...' : '⬇ Baixar PDF'}</button>
           </div>
         </div>
 
@@ -389,13 +421,25 @@ ${aiText}
                   <div style={{ flex: 1 }}><label style={labelStyle}>LinkedIn</label><input type="text" value={data.linkedin} onChange={e => setData({ ...data, linkedin: e.target.value })} style={inputStyle} /></div>
                 </div>
 
+                <div className="mobile-flex-col" style={{ display: 'flex', gap: '8px' }}>
+                  <div style={{ flex: 1 }}>
+                    <label style={labelStyle}>Data de Nascimento <span style={{ fontSize: '10px', fontWeight: '400', color: 'var(--text-tertiary)', textTransform: 'none' }}>(opcional)</span></label>
+                    <input type="date" value={data.dataNascimento} onChange={e => setData({ ...data, dataNascimento: e.target.value })} style={inputStyle} />
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <label style={labelStyle}>Estado Civil <span style={{ fontSize: '10px', fontWeight: '400', color: 'var(--text-tertiary)', textTransform: 'none' }}>(opcional)</span></label>
+                    <input type="text" value={data.estadoCivil} onChange={e => setData({ ...data, estadoCivil: e.target.value })} style={inputStyle} placeholder="Solteiro, Casado..." />
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <label style={labelStyle}>Nacionalidade <span style={{ fontSize: '10px', fontWeight: '400', color: 'var(--text-tertiary)', textTransform: 'none' }}>(opcional)</span></label>
+                    <input type="text" value={data.nacionalidade} onChange={e => setData({ ...data, nacionalidade: e.target.value })} style={inputStyle} />
+                  </div>
+                </div>
+
                 {template === 8 && (
                   <div className="mobile-p-20" style={{ border: '2px dashed var(--border-strong)', padding: '20px', borderRadius: '12px', marginTop: '16px', background: 'var(--bg-surface)' }}>
-                    <h4 style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '12px', fontWeight: '800' }}>Campos Exclusivos (Moçambique)</h4>
+                    <h4 style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '12px', fontWeight: '800' }}>Campos Exclusivos — Modelo Moçambique</h4>
                     <div className="mobile-grid-1" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-                      <div><label style={labelStyle}>Nacionalidade</label><input type="text" value={data.nacionalidade} onChange={e => setData({ ...data, nacionalidade: e.target.value })} style={inputStyle} /></div>
-                      <div><label style={labelStyle}>Data Nascimento</label><input type="text" value={data.dataNascimento} onChange={e => setData({ ...data, dataNascimento: e.target.value })} style={inputStyle} /></div>
-                      <div><label style={labelStyle}>Estado Civil</label><input type="text" value={data.estadoCivil} onChange={e => setData({ ...data, estadoCivil: e.target.value })} style={inputStyle} /></div>
                       <div><label style={labelStyle}>B.I. / NUIT</label><input type="text" value={data.bi} onChange={e => setData({ ...data, bi: e.target.value })} style={inputStyle} /></div>
                     </div>
                   </div>
@@ -497,7 +541,7 @@ ${aiText}
               <span style={{ color: 'var(--accent-primary)' }}>✦</span> Auditoria de IA & Visualização
             </h3>
             <div className="mobile-wrap" style={{ display: 'flex', gap: '12px' }}>
-              <button className="btn-primary" onClick={handlePdfDownload} style={{ padding: '8px 16px', borderRadius: '6px', fontSize: '13px' }}>⬇ Baixar PDF Final</button>
+              <button className="btn-primary" onClick={handlePdfDownload} disabled={pdfLoading} style={{ padding: '8px 16px', borderRadius: '6px', fontSize: '13px', opacity: pdfLoading ? 0.7 : 1 }}>{pdfLoading ? '⏳ A gerar...' : '⬇ Baixar PDF Final'}</button>
               <button className="btn-secondary" onClick={() => setShowPreview(false)} style={{ padding: '8px 16px', borderRadius: '6px', fontSize: '13px' }}>✕ Fechar Tudo</button>
             </div>
           </div>
@@ -542,8 +586,10 @@ ${aiText}
                     </div>
                   </div>
                 ) : (
-                  <div style={{ padding: '20px 0', textAlign: 'center', color: 'var(--text-tertiary)', fontSize: '14px' }}>
-                    Modo offline. Análise rápida indisponível sem login/API no Backend.
+                  <div style={{ padding: '30px 20px', textAlign: 'center', background: '#f8fafc', borderRadius: '12px', border: '1px dashed #cbd5e1', color: 'var(--text-tertiary)', fontSize: '14px', marginTop: '20px' }}>
+                    <div style={{ fontSize: '24px', marginBottom: '12px' }}>✨</div>
+                    <p style={{ margin: '0 0 8px 0', color: 'var(--text-primary)', fontWeight: '600' }}>O seu design está quase pronto e com excelente aspeto!</p>
+                    <p style={{ margin: 0, fontSize: '13px' }}>A nossa <strong>Análise IA Avançada</strong> (correção ortográfica, sugestão de palavras-chave, dicas de recrutador) está disponível conectando o Backend.</p>
                   </div>
                 )}
               </div>
@@ -629,12 +675,14 @@ ${aiText}
         </div>
       )}
 
-      {/* HIDDEN PRINT CONTAINER - ALWAYS RENDERED FOR WINDOW.PRINT TO WORK */}
-      <div
-        id="print-area"
-        style={{ display: 'none' }}
-        dangerouslySetInnerHTML={{ __html: renderCV(template, data, lang) }}
-      />
+      {/* HIDDEN PRINT AREA – visually off-screen wrapper so inner ref is clean */}
+      <div style={{ position: 'absolute', top: '-9999px', left: '-9999px' }}>
+        <div
+          ref={printRef}
+          id="print-area"
+          dangerouslySetInnerHTML={{ __html: renderCV(template, data, lang) }}
+        />
+      </div>
     </div>
   );
 };

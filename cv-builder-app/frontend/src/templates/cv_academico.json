@@ -1,0 +1,43 @@
+{
+    "id": "model_e",
+    "name": "Engenharia e Técnico",
+    "layout": {
+        "type": "two-column",
+        "sidebarPosition": "left",
+        "sidebarWidth": "33%"
+    },
+    "theme": {
+        "colors": {
+            "primary": "#1e3a8a",
+            "textHeader": "#1e3a8a",
+            "textMain": "#1e293b",
+            "sidebarBg": "#1e3a8a",
+            "sidebarText": "#bfdbfe",
+            "sidebarTitle": "#ffffff",
+            "photoBorder": "#bfdbfe"
+        },
+        "font": "'Roboto Condensed', 'Roboto', sans-serif"
+    },
+    "variants": {
+        "headings": "bold-line",
+        "experience": "timeline",
+        "education": "timeline",
+        "skills": "bar",
+        "languages": "dots"
+    },
+    "structure": {
+        "sidebar": [
+            "photo",
+            "contact",
+            "education",
+            "skills",
+            "languages"
+        ],
+        "main": [
+            "header",
+            "summary",
+            "experience",
+            "courses"
+        ]
+    }
+}

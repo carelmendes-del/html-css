@@ -1,0 +1,46 @@
+{
+    "id": "executivo",
+    "name": "Executivo",
+    "layout": {
+        "type": "topbar-sidebar",
+        "sidebarPosition": "left",
+        "sidebarWidth": "33%"
+    },
+    "theme": {
+        "colors": {
+            "primary": "#1d4ed8",
+            "topbarBg": "#1e293b",
+            "topbarText": "#ffffff",
+            "sidebarBg": "#0f172a",
+            "sidebarText": "#cbd5e1",
+            "sidebarTitle": "#ffffff",
+            "textMain": "#1e293b",
+            "photoBorder": "#1d4ed8"
+        },
+        "font": "'Inter', Arial, sans-serif"
+    },
+    "variants": {
+        "headings": "minimal",
+        "contact": "inline",
+        "experience": "classic",
+        "skills": "comma",
+        "languages": "dots",
+        "photo": "circular"
+    },
+    "structure": {
+        "topbar": [
+            "header"
+        ],
+        "sidebar": [
+            "photo",
+            "contact",
+            "languages",
+            "skills"
+        ],
+        "main": [
+            "summary",
+            "experience",
+            "education"
+        ]
+    }
+}

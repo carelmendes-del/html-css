@@ -1,20 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { FileText, Mail, Bot, Settings, Search, Clock, Plus, ArrowRight } from 'lucide-react';
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const [cvs, setCvs] = useState([]);
+  const [cvs] = useState(() => [
+    { id: 1, title: 'CV Administrador IT (Moçambique)', updated_at: new Date().toISOString() },
+    { id: 2, title: 'CV Gestor de Projetos', updated_at: new Date(Date.now() - 86400000).toISOString() }
+  ]);
   const user = JSON.parse(sessionStorage.getItem('user') || '{}');
-
-  useEffect(() => {
-    // In actual implementation this fetches from backend
-    setCvs([
-      { id: 1, title: 'CV Administrador IT (Moçambique)', updated_at: new Date().toISOString() },
-      { id: 2, title: 'CV Gestor de Projetos', updated_at: new Date(Date.now() - 86400000).toISOString() }
-    ]);
-  }, []);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>

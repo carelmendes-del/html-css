@@ -1,0 +1,43 @@
+{
+    "id": "moderno",
+    "name": "Design Moderno",
+    "layout": {
+        "type": "two-column",
+        "sidebarPosition": "left",
+        "sidebarWidth": "35%"
+    },
+    "theme": {
+        "colors": {
+            "primary": "#fbbf24",
+            "textMain": "#334155",
+            "sidebarBg": "#0f172a",
+            "sidebarText": "#cbd5e1",
+            "sidebarTitle": "#fbbf24",
+            "background": "#ffffff",
+            "photoBorder": "#fbbf24"
+        },
+        "font": "'Barlow', 'Inter', sans-serif"
+    },
+    "variants": {
+        "headings": "bold-line",
+        "experience": "timeline",
+        "skills": "bar",
+        "languages": "dots",
+        "photo": "square"
+    },
+    "structure": {
+        "sidebar": [
+            "photo",
+            "contact",
+            "languages",
+            "skills"
+        ],
+        "main": [
+            "header",
+            "summary",
+            "experience",
+            "education",
+            "courses"
+        ]
+    }
+}

@@ -1,0 +1,43 @@
+{
+    "id": "cronologico",
+    "name": "Cronológico Clássico",
+    "layout": {
+        "type": "two-column",
+        "sidebarPosition": "left",
+        "sidebarWidth": "33%"
+    },
+    "theme": {
+        "colors": {
+            "primary": "#2b5c8f",
+            "textMain": "#334155",
+            "sidebarBg": "#f8fafc",
+            "sidebarText": "#475569",
+            "sidebarTitle": "#2b5c8f",
+            "photoBorder": "#2b5c8f"
+        },
+        "font": "'Roboto', sans-serif"
+    },
+    "variants": {
+        "headings": "underlined",
+        "experience": "classic",
+        "education": "classic",
+        "skills": "pills",
+        "languages": "dots",
+        "photo": "circular"
+    },
+    "structure": {
+        "sidebar": [
+            "photo",
+            "contact",
+            "skills",
+            "languages"
+        ],
+        "main": [
+            "header",
+            "summary",
+            "experience",
+            "education",
+            "courses"
+        ]
+    }
+}

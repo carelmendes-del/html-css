@@ -1,0 +1,43 @@
+{
+    "id": "funcional",
+    "name": "Funcional Elegante",
+    "layout": {
+        "type": "two-column",
+        "sidebarPosition": "left",
+        "sidebarWidth": "36%"
+    },
+    "theme": {
+        "colors": {
+            "primary": "#0f766e",
+            "textMain": "#1e293b",
+            "sidebarBg": "#0f766e",
+            "sidebarText": "#f8fafc",
+            "sidebarTitle": "#ffffff",
+            "photoBorder": "#ffffff"
+        },
+        "font": "'Montserrat', sans-serif"
+    },
+    "variants": {
+        "headings": "minimal",
+        "experience": "timeline",
+        "education": "timeline",
+        "skills": "bar",
+        "languages": "dots",
+        "photo": "circular"
+    },
+    "structure": {
+        "sidebar": [
+            "photo",
+            "contact",
+            "skills",
+            "languages"
+        ],
+        "main": [
+            "header",
+            "summary",
+            "experience",
+            "education",
+            "courses"
+        ]
+    }
+}

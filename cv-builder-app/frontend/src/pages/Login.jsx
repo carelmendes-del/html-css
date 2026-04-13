@@ -15,26 +15,31 @@ const Login = () => {
 
   const handleGoogleSuccess = async (credentialResponse) => {
     try {
-      const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-      const res = await axios.post(`${BASE_URL}/api/auth/google`, { token: credentialResponse.credential });
+      const res = await axios.post('/api/auth/google', { token: credentialResponse.credential });
       sessionStorage.setItem('token', res.data.token);
       sessionStorage.setItem('user', JSON.stringify(res.data.user));
       navigate('/');
-    } catch (err) {
-      setError('Erro ao fazer login com Google.');
+    } catch {
+      setError('Erro ao fazer login com Google. Verifique se o servidor backend está ativo.');
     }
+  };
+
+  const handleGuestAccess = () => {
+    sessionStorage.setItem('token', 'guest-token-' + Date.now());
+    sessionStorage.setItem('user', JSON.stringify({ name: 'Utilizador', email: '' }));
+    navigate('/');
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const endpoint = isRegister ? '/api/auth/register' : '/api/auth/login';
-      // MOCK: in a full implementation, add register/login local routes
-      sessionStorage.setItem('token', 'local-jwt-token');
-      sessionStorage.setItem('user', JSON.stringify({ email, name: name || 'Utilizador' }));
+      const res = await axios.post(endpoint, { email, password, name });
+      sessionStorage.setItem('token', res.data.token);
+      sessionStorage.setItem('user', JSON.stringify(res.data.user));
       navigate('/');
     } catch (err) {
-      setError('Erro na autenticação local.');
+      setError(err.response?.data?.error || 'Erro na autenticação. Verifique se o servidor está ativo.');
     }
   };
 
@@ -135,6 +140,19 @@ const Login = () => {
             {isRegister ? 'Faz Login' : 'Cria Conta Livre'}
           </button>
         </p>
+
+        <div style={{ marginTop: '20px', textAlign: 'center' }}>
+          <div style={{ height: '1px', background: 'var(--border-strong)', margin: '0 0 18px 0' }}></div>
+          <button
+            onClick={handleGuestAccess}
+            style={{ background: 'transparent', border: '1px solid var(--border-strong)', color: 'var(--text-secondary)', borderRadius: '10px', padding: '12px 24px', cursor: 'pointer', fontSize: '14px', width: '100%', transition: 'all 0.2s', fontWeight: '600' }}
+          >
+            👤 Continuar sem conta (modo visitante)
+          </button>
+          <p style={{ fontSize: '11px', color: 'var(--text-tertiary)', marginTop: '8px' }}>
+            Os teus dados ficam guardados no browser. Funcionalidades de IA requerem login.
+          </p>
+        </div>
       </div>
     </div>
   );

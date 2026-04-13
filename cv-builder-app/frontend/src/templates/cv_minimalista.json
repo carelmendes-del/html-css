@@ -1,0 +1,45 @@
+{
+    "id": "model_g",
+    "name": "Saúde e Serviços",
+    "layout": {
+        "type": "topbar-sidebar",
+        "sidebarPosition": "right",
+        "sidebarWidth": "30%"
+    },
+    "theme": {
+        "colors": {
+            "primary": "#0f766e",
+            "topbarBg": "#0f766e",
+            "topbarText": "#ffffff",
+            "textMain": "#334155",
+            "sidebarBg": "#f8fafc",
+            "sidebarText": "#475569",
+            "sidebarTitle": "#0f766e",
+            "photoBorder": "#ffffff"
+        },
+        "font": "'Inter', Arial, sans-serif"
+    },
+    "variants": {
+        "headings": "underlined",
+        "experience": "classic",
+        "skills": "bar",
+        "languages": "dots"
+    },
+    "structure": {
+        "topbar": [
+            "photo",
+            "header",
+            "contact"
+        ],
+        "main": [
+            "experience",
+            "education",
+            "courses"
+        ],
+        "sidebar": [
+            "summary",
+            "skills",
+            "languages"
+        ]
+    }
+}

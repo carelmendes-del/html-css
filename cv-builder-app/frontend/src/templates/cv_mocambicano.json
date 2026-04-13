@@ -1,0 +1,37 @@
+{
+    "id": "mocambicano",
+    "name": "Moçambicano Clássico (2024/2025)",
+    "layout": {
+        "type": "single-column"
+    },
+    "theme": {
+        "colors": {
+            "primary": "#000000",
+            "textMain": "#111111",
+            "background": "#ffffff"
+        },
+        "font": "'Times New Roman', Times, serif"
+    },
+    "variants": {
+        "headings": "mozambican",
+        "contact": "mozambican",
+        "experience": "mozambican",
+        "education": "mozambican",
+        "languages": "mozambican",
+        "skills": "mozambican",
+        "photo": "hidden"
+    },
+    "structure": {
+        "main": [
+            "page-title",
+            "photo",
+            "contact",
+            "summary",
+            "education",
+            "experience",
+            "languages",
+            "skills",
+            "courses"
+        ]
+    }
+}

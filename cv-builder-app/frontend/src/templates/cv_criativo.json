@@ -1,0 +1,45 @@
+{
+    "id": "criativo",
+    "name": "Criativo (Curvo)",
+    "layout": {
+        "type": "two-column",
+        "geometry": "curve-header",
+        "sidebarPosition": "left",
+        "sidebarWidth": "38%"
+    },
+    "theme": {
+        "colors": {
+            "primary": "#0f766e",
+            "textMain": "#111827",
+            "sidebarBg": "#134e4a",
+            "sidebarText": "#ccfbf1",
+            "sidebarTitle": "#ffffff",
+            "photoBorder": "#ffffff"
+        },
+        "font": "'Outfit', sans-serif"
+    },
+    "variants": {
+        "headings": "bold-line",
+        "contact": "default",
+        "photo": "floating",
+        "skills": "text",
+        "languages": "text",
+        "experience": "timeline",
+        "education": "timeline"
+    },
+    "structure": {
+        "sidebar": [
+            "header",
+            "photo",
+            "education",
+            "courses",
+            "languages"
+        ],
+        "main": [
+            "contact",
+            "summary",
+            "experience",
+            "skills"
+        ]
+    }
+}

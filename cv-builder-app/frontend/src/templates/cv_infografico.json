@@ -1,0 +1,47 @@
+{
+    "id": "infografico",
+    "name": "Infográfico",
+    "layout": {
+        "type": "topbar-sidebar",
+        "sidebarPosition": "right",
+        "sidebarWidth": "35%"
+    },
+    "theme": {
+        "colors": {
+            "primary": "#ea580c",
+            "topbarBg": "#292524",
+            "topbarText": "#ffffff",
+            "sidebarBg": "#f5f5f4",
+            "sidebarText": "#44403c",
+            "sidebarTitle": "#ea580c",
+            "textMain": "#292524",
+            "photoBorder": "#ea580c"
+        },
+        "font": "'Lato', sans-serif"
+    },
+    "variants": {
+        "headings": "bold-line",
+        "skills": "bar",
+        "languages": "dots",
+        "experience": "timeline",
+        "education": "timeline",
+        "photo": "circular"
+    },
+    "structure": {
+        "topbar": [
+            "photo",
+            "header",
+            "contact"
+        ],
+        "main": [
+            "summary",
+            "experience",
+            "education"
+        ],
+        "sidebar": [
+            "skills",
+            "languages",
+            "courses"
+        ]
+    }
+}
